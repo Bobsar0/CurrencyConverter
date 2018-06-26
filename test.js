@@ -67,9 +67,36 @@ function getCountries(){
 	})
 }
 
+//CONVERT
+
+
+// Test function to convert between USD and NGN
+function USD_NGN(){
+	USD = encodeURIComponent('USD') //encodes 'USD' as a valid URl component
+	NGN = encodeURIComponent('NGN') //encodes 'NGN' as a valid URl component
+
+	const query = `${USD}_${NGN}`; //query string
+	const url = `${host}/api/v5/convert?q=${query}&compact=ultra`; //url
+
+	const urlReq = new Request(url, {method: 'GET'}); //creates a new Request object with the url to retrieve currencies from the api and GET method passed into it
+
+	fetch(urlReq).then(function(resp){ //Fetch urlReq resources from the network. This returns a Promise that resolves to the Response (urlResp) to that request
+		return resp.json().then(function(data){ // Reads the response stream (resp) and  returns a promise that resolves with the result of parsing the body text as JSON.
+			//console.log(data); //to check returned data response
+			document.getElementById('convert').innerHTML = `1 USD = ${data[query]} NGN`;//displays result on html element with id 'convert'
+		}).catch(function(jsonErr){
+			console.log("Error in parsing JSON data: ", jsonErr)
+		})
+	}).catch(function(err){
+		console.log('Error in fetching response: ', err);
+	})
+}
+
 //Listens for a mouse click on the HTML elements with the corresponding IDs and calls corresponding functions
 document.getElementById("currencies").addEventListener("click", getCurrencies());
 document.getElementById("countries").addEventListener("click", getCountries());
+document.getElementById("convert").addEventListener("click", USD_NGN());
+
 
 
 
