@@ -43,8 +43,34 @@ function getCurrencies(){
 	})
 }
 
-//Listens for a mouse click on the HTML element with 'currencies' ID and calls getCurrencies() function upon click
+//Get countries
+function getCountries(){
+	let countriesList = document.querySelector('ul#countries'); // returns the ul Element within the HTML document with id="countries"
+	urlReq = new Request(`${host}/api/v5/countries`);
+	fetch(urlReq).then(function(urlResp){ 
+		return urlResp.json().then(function(countries){	
+			//console.log("Countries object: ", countries); //object of objects of key-value pairs 
+			const countryEntries = Object.entries(countries.results); // returns an array of the result object's own enumerable property [key, value] pairs
+			console.log("Country entries: ", countryEntries); //object of key-value pairs 
+
+			for(let entry of countryEntries){ //iterates over each value of 'countryEntries'
+				//console.log("Country entry: ", entry); //to check content of 'entry' 
+				let country = document.createElement('li'); //creates new instance of list element
+				country.innerHTML = entry[1].name; //updates the html content of the country list with the name of the country
+				countriesList.appendChild(country); //adds new country list to the list of countries
+			}
+		}).catch(function(jsonErr){
+			console.log("Error in parsing JSON data: ", jsonErr)
+		})
+	}).catch(function(fetchErr){
+		console.log("Error in fetching response from network", fetchErr);
+	})
+}
+
+//Listens for a mouse click on the HTML elements with the corresponding IDs and calls corresponding functions
 document.getElementById("currencies").addEventListener("click", getCurrencies());
+document.getElementById("countries").addEventListener("click", getCountries());
+
 
 
 
