@@ -1,0 +1,212 @@
+body{
+    font: 15px/1.5 Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin:0;
+    background-color: #f4f4f4;
+}
+.container{
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+ul{
+    margin: 0;
+    padding: 0;
+}
+
+/* header section contains the branding of the site and the navigation menu */
+header{
+    background: #353637;
+    color: #ffffff;
+    padding-top: 20px;
+    min-height: 60px;
+    border-bottom: #32a0c2 3px solid;
+}
+header a{
+    color: #ffffff;
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+header li{
+    display: inline;
+    padding: 0 20px 0 20px;
+}
+header #branding{
+    float: left;
+}
+header #branding h1{
+    margin: 0;
+    text-shadow: 2px 2px 4px #000000;
+}
+header #branding h1 a{
+    font-size: 30px;
+    text-transform: none;
+
+}
+header nav{
+    float: right;
+    margin-top: 10px;
+}
+header .highlight, header .current a{
+    color: #32a0c2;
+    font-weight: bold;
+}
+
+header a:hover{  /*Changes appearance of menu links when the mouse is moved over the element */
+    color: #cccccc;
+    font-weight: bold;
+}
+
+/* Showcase */
+#showcase {
+    min-height: 300px;
+    background:url('../img/headerbg.png') no-repeat center;
+    background-size: cover; /*This and no-repeat center above ensures image adapts to various screen sizes  */
+    text-align: center;
+    color: #fcfcfc;
+}
+#showcase h1{
+    margin-top: 100px;
+    font-size: 55px;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px #000000;
+}
+#showcase p{
+    font-size: 20px;
+    text-shadow: 2px 2px 4px #000000
+}
+
+/* Newsletter */
+#newsletter{
+    padding: 15px;
+    color: #ffffff;
+    background: #353637;
+}
+#newsletter h1{
+    float: left;
+}
+#newsletter form{
+    float: right;
+    margin-top: 15px;
+}
+#newsletter input[type="email"]{
+    padding: 4px;
+    height: 25px;
+    width: 250px;
+}
+.button_1{
+    height: 38px;
+    background: #cccccc;
+    border: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: #353637;
+}
+
+/* Footer */
+footer{
+    padding: 20px;
+    margin-top: 20px;
+    color: #ffffff;
+    background-color: #32a0c2;
+    text-align: center;
+    text-shadow: #353637;
+    font-weight: bold;
+    font-size: 20px
+}
+
+/*Boxes*/
+.box{
+    text-align: center;
+}
+.box i{
+    margin-top: 20px;
+    color: #32a0c2;
+}
+
+/********ABOUT*****************/
+/* Sidebar */
+aside#sidebar{
+    float: right;
+    width: 30%;
+    padding: 5px;
+}
+aside#sidebar .contact input, aside#sidebar .contact textarea{
+    width: 90%;
+    padding: 5px;
+}
+aside#sidebar .imgs{
+    float: center;
+    width: 180px;
+    height: 180px
+}
+article#main-col{
+    float: left;
+    width: 65%;
+}
+
+/********* Services ************/
+ul#services li{
+    list-style: none;
+    padding: 20px;
+    border: #cccccc groove 5px;
+    margin-bottom: 5px;
+    background: #32a0c2;
+}
+ul#services h3{
+    border-bottom: #353637 solid 1px;
+}
+
+/***** Gallery*******/
+#gallerybg{
+    background-image: url('../img/header3.jpg');
+    min-height: 400px;
+    background-position: center;
+    background-size: cover;
+    text-align: center;
+    color: #353637;
+}
+#gallerybg h2{
+    font-size: 25px;
+}
+#gallerybg h1{
+    margin-top: 20px;
+    font-size: 55px;
+    margin-bottom: 20px;
+}
+
+
+    /********RESPONSIVENESS********/
+/* Adding media queries to ensure the website is responsive so as to adapt to changing screen sizes */
+@media(max-width: 800px) { /* Valid for screen sizes with max width of 800 pixel*/
+    header #branding,
+    header nav,
+    header nav li,
+    #newsletter h1,
+    #newsletter form,
+    #boxes .box,
+    article#main-col,
+    aside#sidebarm{
+        float: none;
+        text-align: center;
+        width: 100%;
+    }
+    header{
+        padding-bottom: 20px;
+    }
+    #showcase h1{
+        margin-top: 40px;
+    }
+    #newsletter button{
+        display: block;
+        width: 100%;
+    }
+    #newsletter form input[type="email"],
+    .contact input,
+    .contact textarea,
+    .contact label{
+        width: 100%;
+        margin-bottom: 5px;
+      }
+}
