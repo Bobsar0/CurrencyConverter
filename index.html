@@ -11,10 +11,9 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/table.css">
     <link rel="stylesheet" href="./css/fontawesome/fontawesome-all.css">
-    <script src="test.js"></script>
 
 </head>
-<body>
+<body onload="getCurrencies()">
         <!-- contains top level bar of site with branding and navigation menu -->
     <header> 
         <div class="container">
@@ -66,64 +65,43 @@
 
         </div>
     </section>
+    <!--CONVERT-->
     <section >
-        <div id ="convertNow">
-            <div class="box">
-                    <table class="conversionTable">
-                    <th colspan="4">CONVERSION TOOL</th>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <select>
-                                    <option class="select">Select currency to convert FROM</option>
-                                    <option id="fromCurOption"></option><!--JS function call inserts Currencies to convert from here-->
-                                </select>
-                            </td>
-                            <td><i class="fas fa-arrows-alt-v fa-2x" id="swap"></i></td>
-                            <td><input type="number" name="inpAmount" required></td>
-                            <td><button id="fromSymbol"></button></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <select>
-                                    <option class="select">Select currency to convert TO...</option>
-                                    <option id="toCurOption"></option><!--JS function call inserts Currencies to convert to here-->
-                                </select>
-                            </td>
-                            <td></td>
-                            <td><input type="number" name="outAmount"></td>
-                            <td><button id="toSymbol"></button></td>
-                        </tr>
-                        <tr>           
-                            <td colspan="4"><button class="convertbutton" id="convertButton">Convert</button></td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-            </div>
+        <div class="box" id="convertNow">
+            <table>
+                <th colspan="2">CONVERSION TOOL</th>
+                <tbody>
+                    <tr>
+                        <td>
+                            <label for="selectFrom">From</label>
+                            <select id="selectFrom" onclick="getCurrencies()"><!--JS function call inserts Currencies to convert FROM as options-->
+                            </select>
+                        </td>
+                        <td><input type="number" id="fromAmount" value=1></td>
+                    </tr>
+                    <!-- <tr><td><i class="fas fa-arrows-alt-v fa-2x" id="swap"></i></td></tr> swap arrow -->
+                    <tr>
+                        <td>
+                            <label for="selectTo">To..</label>
+                            <select id="selectTo" onclick="getCurrencies()"><!--JS function call inserts Currencies to convert TO here-->
+                            </select>
+                        </td>
+                        <td><input type="number" id="toAmount" readonly></td>
+                    </tr>
+                    <tr>           
+                        <td colspan="2"><button class="convertbutton" id="convertButton" onclick="convert()">Convert</button></td>
+                    </tr>
+                    <tr>           
+                        <td colspan="2" id="convertResult"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
     </section>
-            <!-- <div class="vk_c card-section sD9T5c r-iXhnpPteACzI" 
-            jsaction="cc_input_value_change:r.6VQxLmyGNwU;cc_selected_value_change:r.2cfkPIOViFw;xpd_fe:r.pgfZseFl-VU" 
-            data-rtid="iXhnpPteACzI" jsl="$t t-YaDgmEu-OyU;$x 0;" data-hveid="37">
-            <div>
-                <div class="vk_sh vk_gy"><span class="DFlfde" id="knowledge-currency__src-amount">1</span> 
-                    <span id="knowledge-currency__src-currency">Nigerian Naira</span> equals
-                </div>
-                <div class="dDoNo vk_bk"><span class="DFlfde" id="knowledge-currency__tgt-amount">0.0028</span> 
-                    <span id="knowledge-currency__tgt-currency">United States Dollar</span>
-                </div>
-            </div>
-            <div class="xvVOfe"><div class="iCTa8d"><img class="W25PHb" src="https://www.google.com/finance/chart?q=CURRENCY:NGNUSD&amp;chst=vkc&amp;tkr=1&amp;chsc=2&amp;chs=270x94&amp;p=5Y" 
-                id="knowledge-currency__chart" alt="Chart of exchange rate values over time" data-atf="2">
-            </div> -->
-            
-
     <footer>
         <p>CurrencyConverter, Copyright &copy; 2018</p>
         <p>Powered by <i>free.currencyconverterapi.com</i></p></p>
     </footer>
+    <script src="currency.js"></script>
 </body>
 </html>

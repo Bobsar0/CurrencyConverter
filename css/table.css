@@ -1,7 +1,6 @@
 table, th{
     margin-top: 50px;
-    margin-left: 33%;
-    /* text-align: center; */
+    margin-left: 30%;
     border: 3px solid #32a0c2;
     border-collapse: collapse;
 }
@@ -10,30 +9,12 @@ th{
     background-color: #353637;
     color: #32a0c2;
     height: 50px;
-    font-size: 30px
-
+    font-size: 30px;
 }
-/* table .container{
-    float: 
-} */
 
 td{
     padding: 5px;
-    /* border-bottom: 10px; */
 }
-td #fromSymbol #toSymbol{
-    cursor: not-allowed; 
-    /* opacity: 0.2;  */
-    color: #32a0c2
-}
-
-/* td .select{
-    width: 100px;
-} */
-
-/* div .tabContainer{
-    text-align: center;
-} */
 
 .convertbutton{
     margin-top: 10px;
