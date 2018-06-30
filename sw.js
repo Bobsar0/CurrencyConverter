@@ -25,7 +25,6 @@ self.addEventListener('install', function(event) {
       '/css/fontawesome/fontawesome-all.css',
       '/css/webfonts/fa-solid-900.woff2',
       '/img/headerbg.png',
-      '/img/404.gif',
       
       'https://free.currencyconverterapi.com/api/v5/currencies'
     ];
