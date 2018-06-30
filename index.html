@@ -9,7 +9,7 @@
     <title>Currency Converter | Steve Onyeneke</title>
     
     <link rel="stylesheet" href="./css/style.css">
-    <link rel="stylesheet" href="./css/table.css">
+    <link rel="stylesheet" href="./css/form.css">
     <link rel="stylesheet" href="./css/fontawesome/fontawesome-all.css">
 
 </head>
@@ -18,13 +18,12 @@
     <header> 
         <div class="container">
             <div id="branding">
-                <h1><i class="fas fa-chart-line"></i><a href="index.html"><span class="highlight"> Currency</span>Converter</a></h1>
+                <h1><i class="fas fa-chart-line"></i><a href="index.html"><span class="highlight"> Currency</span><span style="color:goldenrod">Converter</span></a></h1>
             </div>
             <nav>
                 <ul>
                     <li class="current"><a href="index.html">Home</a></li>
                     <li><a href="#features">Features</a></li>
-                    <li><a href="#convertNow">Convert Now</a></li>
                 </ul>
             </nav>
         </div>
@@ -32,7 +31,31 @@
     <section id="showcase"> <!--contains main image and main side headline-->
         <div class="container">
             <h1>Currency Converter</h1>
-            <p>Google | Udacity | Andela Learning Community </p>
+            <p style="color:greenyellow">Calculate Exchange rates between any two Currencies in no time!</p>
+       
+            <form class="convertForm">
+                    <span class="from">From</span>
+                    <input type="number" id="fromAmount" value=1>
+                    <select id="selectFrom" onclick="getCurrencies()"> <!--JS function call inserts Currencies to convert FROM as options-->
+                    </select>
+                    <!-- <div class="swap"><span><i class="fas fa-arrows-alt-v fa-2x" style="color: grey; border: black "></i></span></div> -->
+                    <div class="swap"> 
+                        <button class="swapBtn" onclick="swap()">
+                            <img src="img/swap5.png" alt="swap_img" width="50px" height="50px">
+                        </button>
+                    </div>
+                    <span class="to">To </span>
+                    <input type="number" id="toAmount" readonly>
+                    <select id="selectTo" onclick="getCurrencies()"><!--JS function call inserts Currencies to convert TO here-->
+                    </select>
+
+                    <div>
+                    <button class="convertbutton" id="convertButton" onclick="convert()">Convert</button></td>
+                    <p id="convertResult"></p>
+                    </div>
+
+                </form>    
+            
         </div>
     </section>
     <section id="newsletter"> <!--Contains an email input field and and a submit button, so that the user can subscribe to the newsletter.-->
@@ -58,49 +81,20 @@
                 <p></p>
             </div>
             <div class="box">
-                <i class="fas fa-wifi fa-4x"></i> <i class="fas fa-unlink fa-4x"></i>
-                <h3>Online/Offline mode supported</h3>
+                <i class="fas fa-unlink fa-4x"></i>
+                <h3>Offline mode supported</h3>
                 <p></p>
             </div>
 
         </div>
     </section>
     <!--CONVERT-->
-    <section >
-        <div class="box" id="convertNow">
-            <table>
-                <th colspan="2">CONVERSION TOOL</th>
-                <tbody>
-                    <tr>
-                        <td>
-                            <label for="selectFrom">From</label>
-                            <select id="selectFrom" onclick="getCurrencies()"><!--JS function call inserts Currencies to convert FROM as options-->
-                            </select>
-                        </td>
-                        <td><input type="number" id="fromAmount" value=1></td>
-                    </tr>
-                    <!-- <tr><td><i class="fas fa-arrows-alt-v fa-2x" id="swap"></i></td></tr> swap arrow -->
-                    <tr>
-                        <td>
-                            <label for="selectTo">To..</label>
-                            <select id="selectTo" onclick="getCurrencies()"><!--JS function call inserts Currencies to convert TO here-->
-                            </select>
-                        </td>
-                        <td><input type="number" id="toAmount" readonly></td>
-                    </tr>
-                    <tr>           
-                        <td colspan="2"><button class="convertbutton" id="convertButton" onclick="convert()">Convert</button></td>
-                    </tr>
-                    <tr>           
-                        <td colspan="2" id="convertResult"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
     <footer>
         <p>CurrencyConverter, Copyright &copy; 2018</p>
-        <p>Powered by <i>free.currencyconverterapi.com</i></p></p>
+        <p>Sponsored by: <span style="color: royalblue">G </span><span style="color: red">o </span><span style="color: orange">o </span><span style="color: royalblue">g </span><span style="color: green">l </span><span style="color: red">e </span> | 
+            <span style="color:royalblue">U d a c i t y</span>  |
+            Andela Learning Community </p>
+        <p>Powered by:  <i>The Free Currency Converter API</i></p></p>
     </footer>
     <script src="idb.js"></script>
     <script src="maindb.js"></script>
