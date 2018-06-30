@@ -14,7 +14,7 @@ if('serviceWorker' in navigator) { //if browser supports the ServiceWorker featu
 // Creating the cache and adding items to it
 let staticCacheName = 'converter-v2'; //TO-DO: VERSIONING
 
-// On the ServiceWorker install event - We cache the HTML, CSS, JS, and any static files that make up the application shell:
+// On the ServiceWorker install event - We cache the HTML, CSS, JS, and any files that make up the application shell. Also cache the currency store from the API URL to quickly populate list of currencies upon document load:
 // This event listener triggers when the ServiceWorker is first installed
 self.addEventListener('install', function(event) {
     var urlsToCache = [
@@ -52,7 +52,6 @@ self.addEventListener('activate', event => {
         })
     )
 });
-  
 
  //Return entry for matching response from cache
 // If there isn't, fetch from the network.
@@ -63,9 +62,7 @@ self.addEventListener('fetch', function(event) {
                 console.log("Entry found in cache!!!");	
                 return response;
             }
-            console.log("Fetching request from network...");
             return fetch(event.request); //Otherwise, fetch from network
-        
         }) 
     )
 });
