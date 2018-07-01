@@ -31,36 +31,31 @@
     <section id="showcase"> <!--contains main image and main side headline-->
         <div class="container">
             <h1>Currency Converter</h1>
-            <p style="color:greenyellow">Calculate Exchange rates between any two Currencies in no time!</p>
-       
-            <form class="convertForm">
-                    <span class="from">From</span>
-                    <input type="number" id="fromAmount" value=1>
-                    <select id="selectFrom" onclick="getCurrencies()"> <!--JS function call inserts Currencies to convert FROM as options-->
+            <p>RAPIDLY Calculate Exchange rates between any two Currencies!</p>
+                    <button class="from">From</button>
+                    <input type="number" id="fromAmount" placeholder=1 value=1 oninput="convert()">
+                    <select id="selectFrom" onclick="getCurrencies()" onchange="clearToInput()"> <!--JS function call inserts Currencies to convert FROM as options-->
                     </select>
-                    <!-- <div class="swap"><span><i class="fas fa-arrows-alt-v fa-2x" style="color: grey; border: black "></i></span></div> -->
                     <div class="swap"> 
-                        <button class="swapBtn" onclick="swap()">
+                        <button class="swapBtn" onclick="return swap()" title="Swap currencies">
                             <img src="img/swap5.png" alt="swap_img" width="50px" height="50px">
                         </button>
                     </div>
-                    <span class="to">To </span>
-                    <input type="number" id="toAmount" readonly>
-                    <select id="selectTo" onclick="getCurrencies()"><!--JS function call inserts Currencies to convert TO here-->
+                    <button class="to">To </button>
+                    <input type="number" id="toAmount" placeholder="Click convert..." readonly>
+                    <select id="selectTo" onclick="getCurrencies()" onchange="clearToInput()"><!--JS function call inserts Currencies to convert TO here-->
                     </select>
 
                     <div>
-                    <button class="convertbutton" id="convertButton" onclick="convert()">Convert</button></td>
-                    <p id="convertResult"></p>
+                    <button type="submit" class="convertbutton" id="convertButton" onclick="convert()">Convert</button></td>
                     </div>
-
-                </form>    
+                <p id="convertResult"></p>
+ 
             
         </div>
     </section>
     <section id="newsletter"> <!--Contains an email input field and and a submit button, so that the user can subscribe to the newsletter.-->
         <div class="container">
-            <h1>Get Our Newsletter</h1>
                 <form action="">
                     <input type="email" placeholder="Enter your email address ... ">
                     <button type="submit" class="button_1">Subscribe</button>
