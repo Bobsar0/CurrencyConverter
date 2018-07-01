@@ -31,11 +31,15 @@ function getCurrencies(){
 		return urlResp.json().then(currencies => {
 			//console.log("Currencies", currencies); //to check contents of currencies object   
 			for (let index in currencies.results){
-				//console.log("Currency values", curValues); // to check contents of curValues object
 				let currencyListFrom = document.createElement('option'); //create new instance of list element
 				let currencyListTo = document.createElement('option'); //create new instance of list element
 				
+				let entries = Object.entries(currencies.results)
+				//console.log("Currency entries", entries); // to check contents of curValues object
+
 				let curValues = Object.values(currencies.results[index]); // assigns an array of the results[index] object's own enumerable property value to curValue
+				// console.log("Currency values", curValues); // to check contents of curValues object
+
 				id = curValues.length < 3 ? curValues[1] : curValues[2];
 
 				currencyListFrom.innerHTML = `${id}   <=>    ${curValues[0]}`; //updates the html content of the currency list created based on length of array as determined by the line above
@@ -78,42 +82,38 @@ function convert(){
 			//console.log("dataaaa: ", data); //to check returned data response
 			outputAmt.value = Number(data[query])*amount;
 
-			document.getElementById('convertResult').innerHTML = `<span style="color: green">${amount}</span> ${selectedFrom} is equal to <span style="color:green"><b>${(Number(data[query])*amount).toFixed(2)}</b></span> ${selectedTo}`;//displays result on html element with id 'convertResult'
+			document.getElementById('convertResult').innerHTML = `${new Date()}: <br> <span style="color: green">${amount}</span> ${selectedFrom} is equal to <span style="color:green"><b>${(Number(data[query])*amount).toFixed(2)}</b></span> ${selectedTo}`;//displays result on html element with id 'convertResult'
 
+			let exchRateObj = {
+				id: `${selectedFrom}_${selectedTo}`,
+				rate:  Number(data[query]),
+				date: new Date().getTime(), //milliseconds
+			};
+			
 			//Adding exchange rate objects to the object store
-			dbPromise.then(db => {
-				let tx = db.transaction('rates', 'readwrite');
-				let rateStore = tx.objectStore('rates');
-				let exchRate = {
-					url: url,
-					id: `${selectedFrom}_${selectedTo}`,
-					rate:  Number(data[query]),
-				   	date: new Date().getTime()
-				};
-				//console.log('Adding rate to IDB... ', exchRate);
-				rateStore.add(exchRate);
-				return tx.complete;	
-			}).then(function(){
-				console.log("Rate added successfully!");
-			});
+			addRateDB(exchRateObj);
+			//Delete record from database after 1hour
+			setTimeout(() => {
+				deleteRateDB(exchRateObj.id);
+			}, 60*60000);
 		}).catch(jsonErr => {console.log("Error in parsing JSON data: ", jsonErr);})
 	}).catch(function(){ //if fetch fails to retrieve from network:
 		console.log("Error in fetching from network, Checking for rate in IDB... ");
 		getRateDB(query).then(function(val){
 			let output = document.getElementById("toAmount");
 			output.value = val*amount;
-			document.getElementById('convertResult').innerHTML = `<span style="color: green">${amount}</span> ${selectedFrom} is equal to <span style="color:green"><b>${(Number(data[query])*amount).toFixed(2)}</b></span> ${selectedTo}`;//displays result on html element with id 'convertResult'
+			document.getElementById('convertResult').innerHTML = `<i>OFFLINE? Rates will still be displayed!...<br> ${new Date()}: <span style="color: green">${amount}</span> ${selectedFrom} is equal to <span style="color:green"><b>${(Number(data[query])*amount).toFixed(2)}</b></span> ${selectedTo}`;//displays result on html element with id 'convertResult'
 			console.log("SUCCESSFULLY RETRIEVED FROM DATABASE!!");
 			return;
 		}).catch(function(){
-			console.log("Result not yet in IDB. Please go online to update the database");
 			let output = document.getElementById("toAmount");
 			output.value = undefined;
-			document.getElementById('convertResult').innerHTML = "Sorry result not in your local IDB yet. Get back online asap so it can be updated for your next search";
+			document.getElementById('convertResult').innerHTML = "Are you OFFLINE? <br> Sorry result not in your local IDB yet. Please go back ONLINE asap so it can be updated for your next search";
 		})
 	 });
 }
 
+//Swaps the FROM/TO selected currencies
 function swap(){
 	console.log("Swapping initiated!...")
     
@@ -127,10 +127,10 @@ function swap(){
 	let selectToText = toOption.text;
 
 	listFrom.options[listFrom.selectedIndex].text = selectToText;
-	selectedFrom = selectToText.slice(0, 3); //selects the id part to be used in conversion function below
+	selectedFrom = selectToText.slice(0, 3); //selects the id part to be used in conversion after swapping
 
 	listTo.options[listTo.selectedIndex].text = selectFromText;
-	selectedTo = selectFromText.slice(0, 3); //selects the id part to be used in conversion function below
+	selectedTo = selectFromText.slice(0, 3); //selects the id part to be used in conversion after swapping
 
 	clearToInput();// clear previous output value and result string underneath the convert button
 
