@@ -18,16 +18,19 @@ let staticCacheName = 'converter-v2'; //TO-DO: VERSIONING
 // This event listener triggers when the ServiceWorker is first installed
 self.addEventListener('install', function(event) {
     var urlsToCache = [
-      '/',
-      '/currency.js',
-      '/css/style.css',
-      '/css/table.css',
-      '/css/fontawesome/fontawesome-all.css',
-      '/css/webfonts/fa-solid-900.woff2',
-      '/img/headerbg.png',
-      'img/swap5.png',
-      
-      'https://free.currencyconverterapi.com/api/v5/currencies'
+        '/',
+        '/currency.js',
+        '/idb.js',
+        '/maindb.js',
+        '/currency.js',
+        '/css/style.css',
+        '/css/table.css',
+        '/css/fontawesome/fontawesome-all.css',
+        '/css/webfonts/fa-solid-900.woff2',
+        '/img/headerbg.png',
+        'img/swap5.png',
+        
+        'https://free.currencyconverterapi.com/api/v5/currencies',
     ];
     event.waitUntil(
       // Add the urls from urlsToCache to the cache      
@@ -57,12 +60,17 @@ self.addEventListener('activate', event => {
 // If there isn't, fetch from the network.
 self.addEventListener('fetch', function(event) {
     event.respondWith(
-        caches.match(event.request).then(function(response){
-            if (response){ //If matching response is found in cache
-                console.log("Entry found in cache!!!");	
-                return response;
+        fetch(event.request).then(function(resp){
+            if (resp.status === 404){
+                return fetch('/img/404.gif'); //return custom 404 page
             }
-            return fetch(event.request); //Otherwise, fetch from network
-        }) 
-    )
+            return caches.match(event.request).then(function(response){
+                if (response){ //If matching response is found in cache
+                    console.log("Entry found in cache!!!");	
+                    return response;
+                }
+                return fetch(event.request); //Otherwise, fetch from network
+            }) 
+        })
+    );
 });

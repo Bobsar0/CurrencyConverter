@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/form.css">
     <link rel="stylesheet" href="./css/fontawesome/fontawesome-all.css">
+    <link rel="manifest" href="/manifest.json">
 
 </head>
 <body onload="getCurrencies()">
@@ -56,10 +57,11 @@
     </section>
     <section id="newsletter"> <!--Contains an email input field and and a submit button, so that the user can subscribe to the newsletter.-->
         <div class="container">
-                <form action="">
+                <!-- <form action="">
                     <input type="email" placeholder="Enter your email address ... ">
                     <button type="submit" class="button_1">Subscribe</button>
-                </form>
+                </form> -->
+                <div id="graph"></div>
         </div>
     </section> 
     <section id="boxes"><!--Contains boxes to highlight features-->
@@ -91,9 +93,9 @@
             Andela Learning Community </p>
         <p>Powered by:  <i>The Free Currency Converter API</i></p></p>
     </footer>
-    <script src="idb.js"></script>
-    <script src="maindb.js"></script>
+    <script src="/jss/idb.js"></script>
+    <script src="/jss/maindb.js"></script>
     <script src="sw.js"></script>
-    <script src="currency.js"></script>
+    <script src="/jss/currency.js"></script>
 </body>
 </html>
