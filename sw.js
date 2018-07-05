@@ -58,12 +58,17 @@ self.addEventListener('activate', event => {
 // If there isn't, fetch from the network.
 self.addEventListener('fetch', function(event) {
     event.respondWith(
-        caches.match(event.request).then(function(response){
-            if (response){ //If matching response is found in cache
-                console.log("Entry found in cache!!!");	
-                return response;
+        fetch(event.request).then(function(resp){
+            if (resp.status === 404){
+                return fetch('/img/404.gif'); //return custom 404 page
             }
-            return fetch(event.request); //Otherwise, fetch from network
-        }) 
-    )
+            return caches.match(event.request).then(function(response){
+                if (response){ //If matching response is found in cache
+                    console.log("Entry found in cache!!!");	
+                    return response;
+                }
+                return fetch(event.request); //Otherwise, fetch from network
+            }) 
+        })
+    );
 });

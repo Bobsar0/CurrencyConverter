@@ -149,7 +149,7 @@ function clearToInput(){
 // 	urlReq = new Request(`${host}/api/v5/countries`);
 // 	fetch(urlReq).then(function(urlResp){ 
 // 		return urlResp.json().then(function(countries){	
-// 			//console.log("Countries object: ", countries); //object of objects of key-value pairs 
+// 		//console.log("Countries object: ", countries); //object of objects of key-value pairs 
 // 			const countryEntries = Object.entries(countries.results); // returns an array of the result object's own enumerable property [key, value] pairs
 // 			console.log("Country entries: ", countryEntries); //object of key-value pairs 
 
