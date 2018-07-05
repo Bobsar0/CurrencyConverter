@@ -5,7 +5,7 @@ if (!('indexedDB' in window)) {
 
 //Creating the Database and the object store
 // Open a Database
-let dbPromise = idb.open('converterDB', 1, upgradeDb => {
+const dbPromise = idb.open('converterDB', 1, upgradeDb => {
     switch (upgradeDb.oldVersion){
         case 0:  // switch executes when the database is first created (oldVersion is 0)
         case 1:
@@ -14,8 +14,20 @@ let dbPromise = idb.open('converterDB', 1, upgradeDb => {
         }
 });
 
+function addRateDB(exchRate){
+    return dbPromise.then(db => {
+        let tx = db.transaction('rates', 'readwrite');
+        let rateStore = tx.objectStore('rates');
+        rateStore.add(exchRate);
+        return tx.complete;	
+    }).then(function(){
+        console.log("IDB: Exchange rate added successfully!");
+    });
+}
+
 // Retrieves rate from IDB
 function getRateDB(key){
+    console.log("IDB: Getting rate: ", key)
 	return dbPromise.then(db => {
 		let tx = db.transaction('rates', 'readonly');
 		let rateStore = tx.objectStore('rates');
@@ -23,4 +35,16 @@ function getRateDB(key){
 	}).then(val => {
 		return val.rate 
 	});
+}
+
+// Deletes rate from database after a specific time in secs
+function deleteRateDB(key){
+    return dbPromise.then(db => {
+		let tx = db.transaction('rates', 'readwrite');
+		let rateStore = tx.objectStore('rates');
+        rateStore.delete(key);
+        return tx.complete;
+	}).then(function(){
+        console.log("deleteRateDB: Rate deleted... Will be updated in IDB upon next fetch from network");
+    })
 }

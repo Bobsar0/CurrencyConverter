@@ -1,33 +1,77 @@
 form .convertForm{
     margin-top: 25px;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
 
 .from, .to{
+    color: #32a0c2;
+    height: 30px;
     font-size: 20px;
-    /* height: 30px; */
-    color: goldenrod;
     font: bold;
-    text-shadow: 2px 2px 1px #000000;
+    text-shadow: 2px 2px 3px #000000;
+    margin-left: -34px;
+    border:none;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+    background: #353637;
 }
 .to{
-    margin-right: 19px;
+    margin-left: -10px;
+    padding-right: 5px;
+    margin-right: 20px;
 }
 
 #fromAmount, #toAmount{
-    height: 30px;
-    font: bolder;
+    height: 27px;
     font-size: 20px;
-    border-radius: 8px;
-    border-left: 15px solid transparent;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border: none;
+    text-align: right;
+    margin-left: -4px;
+    margin-top: 10px;
+}
+#toAmount{
+    margin-left: -25px;
+    height: 22px;
+    /* margin-top: 8px; */
+
+}
+
+input#fromAmount{
+    opacity: 0.8;
+}
+
+input#toAmount{
+    padding: 4px 1px;
+    color: white; 
+    background-color: rgba(255,255,255, 0.2);
+    text-shadow: 2px 2px 4px #000000;
+}
+
+
+input:focus {
+    color: green;
+}
+
+::placeholder{
+    color:white;
+}
+
+select{
+    color: #000000;
+    text-shadow: 1px 1px grey;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font: bolder;
 }
 
 #selectFrom, #selectTo{
-    height: 35px;
+    padding: 3px;
     font: bolder;
-    font-size: 20px;
+    font-size: 18px;
     border-radius: 8px;
-    background-color: rgb(253, 250, 250);
+    background-color: rgba(253, 250, 250, 0.945);
+    margin-top: 10px;
 }
 
 .convertbutton{
@@ -37,11 +81,12 @@ form .convertForm{
     font-size: 20px;
     padding: 20px 50px;
     border-radius: 20px;
-    margin-bottom: 10%
+    margin-bottom: 10px
 }
 .convertbutton:hover{
     color: #32a0c2;
     background-color: green;
+    font-weight: bolder;
 }
 .swapBtn{
     background: none;
@@ -51,5 +96,5 @@ form .convertForm{
     margin-bottom: 10px;
 }
 .swapBtn:hover{
-    background: goldenrod;
+    background: green;
 }

@@ -1,16 +1,19 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Currency converter project organised by Google, Udacity, Andela as part of the 2018 Google Challenge Scholarship Program - Mobile Web Specialist ">
     <meta name="author" content="Steve Onyeneke">
+    <meta name="theme-color" content="#32a0c2">
+    
     <title>Currency Converter | Steve Onyeneke</title>
     
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/form.css">
     <link rel="stylesheet" href="./css/fontawesome/fontawesome-all.css">
+    <link rel="manifest" href="./manifest.json">
 
 </head>
 <body onload="getCurrencies()">
@@ -18,11 +21,11 @@
     <header> 
         <div class="container">
             <div id="branding">
-                <h1><i class="fas fa-chart-line"></i><a href="index.html"><span class="highlight"> Currency</span><span style="color:goldenrod">Converter</span></a></h1>
+                <h1><i class="fas fa-chart-line"></i><a href="/"><span class="highlight"> Swift</span><span style="color:goldenrod">Converter</span></a></h1>
             </div>
             <nav>
                 <ul>
-                    <li class="current"><a href="index.html">Home</a></li>
+                    <li class="current"><a href="/index.html">Home</a></li>
                     <li><a href="#features">Features</a></li>
                 </ul>
             </nav>
@@ -31,40 +34,37 @@
     <section id="showcase"> <!--contains main image and main side headline-->
         <div class="container">
             <h1>Currency Converter</h1>
-            <p style="color:greenyellow">Calculate Exchange rates between any two Currencies in no time!</p>
-       
-            <form class="convertForm">
-                    <span class="from">From</span>
-                    <input type="number" id="fromAmount" value=1>
-                    <select id="selectFrom" onclick="getCurrencies()"> <!--JS function call inserts Currencies to convert FROM as options-->
-                    </select>
-                    <!-- <div class="swap"><span><i class="fas fa-arrows-alt-v fa-2x" style="color: grey; border: black "></i></span></div> -->
-                    <div class="swap"> 
-                        <button class="swapBtn" onclick="swap()">
-                            <img src="img/swap5.png" alt="swap_img" width="50px" height="50px">
-                        </button>
-                    </div>
-                    <span class="to">To </span>
-                    <input type="number" id="toAmount" readonly>
-                    <select id="selectTo" onclick="getCurrencies()"><!--JS function call inserts Currencies to convert TO here-->
-                    </select>
+            <p><span style="color: goldenrod">SWIFTLY</span> calculates exchange rates between any two Currencies!</p>
+                
+            <button class="from">From</button>
+            <input type="number" id="fromAmount" placeholder=1 value=1 oninput="convert()">
+            <select id="selectFrom" onclick="getCurrencies()" onchange="clearToInput()"> <!--JS function call inserts Currencies to convert FROM as options-->
+            </select>
+            <div class="swap"> 
+                <button class="swapBtn" onclick="return swap()" title="Swap currencies">
+                    <img src="img/swap5.png" alt="swap_img" width="50px" height="50px">
+                </button>
+            </div>
+            <button class="to">To </button>
+            <input type="number" id="toAmount" placeholder="Click convert..." readonly>
+            <select id="selectTo" onclick="getCurrencies()" onchange="clearToInput()"><!--JS function call inserts Currencies to convert TO here-->
+            </select>
 
-                    <div>
-                    <button class="convertbutton" id="convertButton" onclick="convert()">Convert</button></td>
-                    <p id="convertResult"></p>
-                    </div>
+            <div>
+            <button type="submit" class="convertbutton" id="convertButton" onclick="convert()">Convert</button></td>
+            </div>
+            <p id="convertResult"></p>
 
-                </form>    
             
         </div>
     </section>
     <section id="newsletter"> <!--Contains an email input field and and a submit button, so that the user can subscribe to the newsletter.-->
         <div class="container">
-            <h1>Get Our Newsletter</h1>
-                <form action="">
+                <!-- <form action="">
                     <input type="email" placeholder="Enter your email address ... ">
                     <button type="submit" class="button_1">Subscribe</button>
-                </form>
+                </form> -->
+                <div id="graph"></div>
         </div>
     </section> 
     <section id="boxes"><!--Contains boxes to highlight features-->
@@ -90,15 +90,15 @@
     </section>
     <!--CONVERT-->
     <footer>
-        <p>CurrencyConverter, Copyright &copy; 2018</p>
+        <p>SwiftConverter, Copyright &copy; 2018</p>
         <p>Sponsored by: <span style="color: royalblue">G </span><span style="color: red">o </span><span style="color: orange">o </span><span style="color: royalblue">g </span><span style="color: green">l </span><span style="color: red">e </span> | 
             <span style="color:royalblue">U d a c i t y</span>  |
             Andela Learning Community </p>
         <p>Powered by:  <i>The Free Currency Converter API</i></p></p>
     </footer>
-    <script src="idb.js"></script>
-    <script src="maindb.js"></script>
-    <script src="sw.js"></script>
-    <script src="currency.js"></script>
+    <script src="./jss/idb.js" async></script>
+    <script src="./jss/maindb.js" asnyc></script>
+    <script src="./sw.js"></script>
+    <script src="./jss/currency.js" async></script>
 </body>
 </html>

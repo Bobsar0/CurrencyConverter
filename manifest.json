@@ -1,0 +1,24 @@
+{
+    "name": "Currency Converter",
+    "short_name": "Swift Converter",
+    "description": "AlcwithGoogle3.0 challenge project.",
+    "start_url": ".",
+    "lang": "en-US",
+    "background_color": "#353637",
+    "display": "standalone",
+    "scope": "/currencyconverter/",
+    "theme_color": "#32a0c2",
+
+    "icons": [
+      {
+        "src": "./img/headerbg.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      },
+      {
+        "src": "./img/swap5.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      }
+    ]
+}

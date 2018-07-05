@@ -12,21 +12,23 @@ if('serviceWorker' in navigator) { //if browser supports the ServiceWorker featu
 // CACHING
 
 // Creating the cache and adding items to it
-let staticCacheName = 'converter-v2'; //TO-DO: VERSIONING
+let staticCacheName = 'converter-v3'; //TO-DO: VERSIONING
 
 // On the ServiceWorker install event - We cache the HTML, CSS, JS, and any files that make up the application shell. Also cache the currency store from the API URL to quickly populate list of currencies upon document load:
 // This event listener triggers when the ServiceWorker is first installed
 self.addEventListener('install', function(event) {
     var urlsToCache = [
-      '/',
-      '/currency.js',
-      '/css/style.css',
-      '/css/table.css',
-      '/css/fontawesome/fontawesome-all.css',
-      '/css/webfonts/fa-solid-900.woff2',
-      '/img/headerbg.png',
-      
-      'https://free.currencyconverterapi.com/api/v5/currencies'
+        './',
+        './jss/idb.js',
+        './jss/maindb.js',
+        './jss/currency.js',
+        './css/style.css',
+        './css/fontawesome/fontawesome-all.css',
+        './css/webfonts/fa-solid-900.woff2',
+        './img/headerbg.png',
+        './img/swap5.png',
+        
+        'https://free.currencyconverterapi.com/api/v5/currencies',
     ];
     event.waitUntil(
       // Add the urls from urlsToCache to the cache      
