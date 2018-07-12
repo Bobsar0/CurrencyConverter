@@ -12,7 +12,7 @@ if('serviceWorker' in navigator) { //if browser supports the ServiceWorker featu
 // CACHING
 
 // Creating the cache and adding items to it
-let staticCacheName = 'converter-v3'; //TO-DO: VERSIONING
+let staticCacheName = 'converter-v2'; //TO-DO: VERSIONING
 
 // On the ServiceWorker install event - We cache the HTML, CSS, JS, and any files that make up the application shell. Also cache the currency store from the API URL to quickly populate list of currencies upon document load:
 // This event listener triggers when the ServiceWorker is first installed
@@ -22,9 +22,12 @@ self.addEventListener('install', function(event) {
         './jss/idb.js',
         './jss/maindb.js',
         './jss/currency.js',
+        './jss/jscharts.js',
+        './jss/graph.js',
         './css/style.css',
+        './css/form.css',
         './css/fontawesome/fontawesome-all.css',
-        './css/webfonts/fa-solid-900.woff2',
+        './css/webfonts/',
         './img/headerbg.png',
         './img/swap5.png',
         
@@ -56,19 +59,25 @@ self.addEventListener('activate', event => {
 
  //Return entry for matching response from cache
 // If there isn't, fetch from the network.
-self.addEventListener('fetch', function(event) {
-    event.respondWith(
-        fetch(event.request).then(function(resp){
-            if (resp.status === 404){
-                return fetch('/img/404.gif'); //return custom 404 page
+self.addEventListener('fetch', event => {
+    // console.log("Event: ", event);
+    // console.log("Event Request: ", event.request);
+    event.respondWith(      
+        caches.match(event.request).then(function(response){
+            // if (event.request.url.endsWith(".js")){
+                // event.request.headers{ "Content-Type": "application/json" }
+            // }
+            if (response){ //If matching response is found in cache
+                console.log("SW: Entry found in cache!!!");	
+                return response;
             }
-            return caches.match(event.request).then(function(response){
-                if (response){ //If matching response is found in cache
-                    console.log("Entry found in cache!!!");	
-                    return response;
-                }
-                return fetch(event.request); //Otherwise, fetch from network
-            }) 
+            return fetch(event.request)
+            // return fetch(event.request).then(function(resp){ //Otherwise, fetch from network
+            //     if (resp.status === 404){
+            //         console.log("SW: 404 error! Displaying custom image...")
+            //         fetch('./img/404.gif'); //return custom 404 page
+            //     }
+            // }).catch(err=>console.log("SW fetch from network: Failed!", err)) 
         })
     );
 });

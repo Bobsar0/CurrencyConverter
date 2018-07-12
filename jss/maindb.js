@@ -14,6 +14,7 @@ const dbPromise = idb.open('converterDB', 1, upgradeDb => {
         }
 });
 
+// Add rate to DB
 function addRateDB(exchRate){
     return dbPromise.then(db => {
         let tx = db.transaction('rates', 'readwrite');

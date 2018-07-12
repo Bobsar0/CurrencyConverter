@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="./css/fontawesome/fontawesome-all.css">
     <link rel="manifest" href="./manifest.json">
 
+
 </head>
 <body onload="getCurrencies()">
         <!-- contains top level bar of site with branding and navigation menu -->
@@ -41,7 +42,7 @@
             <select id="selectFrom" onclick="getCurrencies()" onchange="clearToInput()"> <!--JS function call inserts Currencies to convert FROM as options-->
             </select>
             <div class="swap"> 
-                <button class="swapBtn" onclick="return swap()" title="Swap currencies">
+                <button class="swapBtn" onclick="return swap()" title="Click to swap currencies">
                     <img src="./img/swap5.png" alt="swap_img" width="50px" height="50px">
                 </button>
             </div>
@@ -58,8 +59,8 @@
             
         </div>
     </section>
-    <section id="newsletter"> 
-        <div class="container">
+    <section id="newsletter">
+        <div class="container" id="chartcontainer">
                 <!-- <form action="">
                     <input type="email" placeholder="Enter your email address ... ">
                     <button type="submit" class="button_1">Subscribe</button>
@@ -77,7 +78,12 @@
             </div>
             <div class="box">
                 <i class="fas fa-globe fa-4x"></i>
-                <h3>All currencies supported</h3>
+                <h3>All currencies supported (incl. BITCOIN)</h3>
+                <p></p>
+            </div>
+            <div class="box">
+                <i class="fas fa-chart-line fa-4x"></i>
+                <h3>Graph functionality to observe price fluctuation over a period</h3>
                 <p></p>
             </div>
             <div class="box">
@@ -96,9 +102,13 @@
             Andela Learning Community </p>
         <p>Powered by:  <i>The Free Currency Converter API</i></p></p>
     </footer>
-    <script src="./jss/idb.js" async></script>
+    <script src="./jss/idb.js"></script>
     <script src="./jss/maindb.js" asnyc></script>
     <script src="./sw.js"></script>
-    <script src="./jss/currency.js" async></script>
+    <script src="./jss/currency.js"></script>
+    <script type="text/javascript" src="./jss/jscharts.js"></script>
+    <script src="./jss/graph.js"></script>
+
+
 </body>
 </html>

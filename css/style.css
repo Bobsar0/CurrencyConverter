@@ -112,6 +112,34 @@ header a:hover{  /*Changes appearance of menu links when the mouse is moved over
     overflow: hidden;
 }
 
+#newsletter{
+    padding: 15px;
+    color: #ffffff;
+    background: #353637;
+}
+#newsletter#graph{
+    
+}
+/* #newsletter h1{
+    float: left;
+} */
+/* #newsletter form{
+    float: right;
+    margin-top: 15px;
+} */
+/* #newsletter input[type="email"]{
+    padding: 4px;
+    height: 25px;
+    width: 250px;
+} */
+.button_1{
+    height: 38px;
+    background: #cccccc;
+    border: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: #353637;
+}
 /* Footer */
 footer{
     padding: 20px;
@@ -191,8 +219,8 @@ ul#services h3{
     header #branding,
     header nav,
     header nav li,
-    #countries h1,
-    #countries form,
+    #newsletter h1,
+    #newsletter form,
     #boxes .box,
     article#main-col,
     aside#sidebarm{

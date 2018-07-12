@@ -22,7 +22,7 @@ form .convertForm{
 }
 
 #fromAmount, #toAmount{
-    height: 27px;
+    height: 28px;
     font-size: 20px;
     border-top-right-radius: 8px;
     border-bottom-right-radius: 8px;
@@ -30,12 +30,11 @@ form .convertForm{
     text-align: right;
     margin-left: -4px;
     margin-top: 10px;
+    font-weight: 530;
 }
 #toAmount{
     margin-left: -25px;
     height: 22px;
-    /* margin-top: 8px; */
-
 }
 
 input#fromAmount{
@@ -51,7 +50,7 @@ input#toAmount{
 
 
 input:focus {
-    color: green;
+    color: goldenrod;
 }
 
 ::placeholder{
@@ -59,15 +58,15 @@ input:focus {
 }
 
 select{
-    color: #000000;
-    text-shadow: 1px 1px grey;
+    /* color: #000000; */
+    /* text-shadow: 1px 1px grey; */
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font: bolder;
+    font-weight: 900;
 }
 
 #selectFrom, #selectTo{
     padding: 3px;
-    font: bolder;
+    /* font: bolder; */
     font-size: 18px;
     border-radius: 8px;
     background-color: rgba(253, 250, 250, 0.945);

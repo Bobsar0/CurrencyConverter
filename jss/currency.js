@@ -20,8 +20,6 @@ let selectedFrom, selectedTo;
 
 //Get currencies
 function getCurrencies(){
-	let id;
-
 	let currenciesListFrom = document.querySelector('select#selectFrom'); // returns the select Element within the HTML document with id="currencies"
 	let currenciesListTo= document.querySelector('select#selectTo'); // returns the select Element within the HTML document with id="currencies"
 
@@ -29,32 +27,36 @@ function getCurrencies(){
     
     fetch(urlReq).then(urlResp => { //Fetch urlReq resources from the network. This returns a Promise that resolves to the Response (urlResp) to that request
 		return urlResp.json().then(currencies => {
-			//console.log("Currencies", currencies); //to check contents of currencies object   
-			for (let index in currencies.results){
+			//console.log("Currencies", currencies); //to check contents of currencies object 
+			const entries = Object.entries(currencies.results);
+			//sort by currencyName using compare function
+			entries.sort((a, b) => {
+				let nameA = a[1].currencyName.toUpperCase(); //ignore casing
+				let nameB = b[1].currencyName.toUpperCase(); //ignore casing
+				if (nameA < nameB){return -1;} //name A comes first
+				if (nameA > nameB){return 1;} //name B comes first
+				return 0; //names must be equal
+			})
+			// console.log("Currency entries after sorting", entries); // to check contents of results object after sorting
+
+			entries.forEach(entry => {
 				let currencyListFrom = document.createElement('option'); //create new instance of list element
 				let currencyListTo = document.createElement('option'); //create new instance of list element
+
+				currencyListFrom.innerHTML = `<b>${entry[1].currencyName} </b>(<span style='color: #32a0c2'>${entry[1].id}</span>)`; //updates the html content of the currency list created based on length of array as determined by the line above
+				currencyListTo.innerHTML = `<b>${entry[1].currencyName} </b>(<span style='color: #32a0c2'>${entry[1].id}</span>)`; //updates the html content of the currency list created based on length of array as determined by the line above
 				
-				let entries = Object.entries(currencies.results);
-				//console.log("Currency entries", entries); // to check contents of curValues object
-
-				let curValues = Object.values(currencies.results[index]); // assigns an array of the results[index] object's own enumerable property value to curValue
-				// console.log("Currency values", curValues); // to check contents of curValues object
-
-				id = curValues.length < 3 ? curValues[1] : curValues[2];
-
-				currencyListFrom.innerHTML = `${id}   <=>    ${curValues[0]}`; //updates the html content of the currency list created based on length of array as determined by the line above
-				currencyListTo.innerHTML = `${id}   <=>    ${curValues[0]}`; //updates the html content of the currency list created based on length of array as determined by the line above
-
 				currenciesListFrom.appendChild(currencyListFrom); //adds new currency list to the list of currencies to convert from
 				currenciesListTo.appendChild(currencyListTo); //adds new currency list to the list of currencies to convert to
-			}
+			})
+
 			// reference to selected option
 			let optionFrom = currenciesListFrom.options[currenciesListFrom.selectedIndex]; //gets the selected option
 			let selectedFromText = optionFrom.text;
-			selectedFrom = selectedFromText.slice(0, 3); //selects the id part to be used in conversion function below
+			selectedFrom = selectedFromText.slice(-4,-1); //selects the id part to be used in conversion function below
 			let optionTo = currenciesListTo.options[currenciesListTo.selectedIndex];
 			let selectedToText = optionTo.text
-			selectedTo = selectedToText.slice(0, 3);				
+			selectedTo = selectedToText.slice(-4,-1);
             }).catch(function(jsonErr){
                 console.log("Error in parsing JSON data: ", jsonErr);
 		});
@@ -80,15 +82,15 @@ function convert(){
 	fetch(urlReq).then(resp => { 
 		return resp.json().then(data => { // Reads the response stream (resp) and  returns a promise that resolves with the result of parsing the JSON body text.
 			outputAmt.value = Number(data[query])*amount;
-
-			document.getElementById('convertResult').innerHTML = `${new Date()}: <br> <span style="color: green">${amount}</span> ${selectedFrom} is equal to <span style="color:green"><b>${(Number(data[query])*amount).toFixed(2)}</b></span> ${selectedTo}`;//displays result on html element with id 'convertResult'
-
+			// document.getElementById('convertResult').innerHTML = `${new Date()}: <br> <span style="color: greenyellow">${amount}</span> ${fromEncoded} is equal to <span style="color:green"><b>${(Number(data[query])*amount).toFixed(2)}</b></span> ${toEncoded} <br>
+			document.getElementById('convertResult').innerHTML = `${new Date()}: <br> <span style="color: greenyellow">1</span> ${fromEncoded} is equal to <span style="color:greenyellow"><b>${(Number(data[query])).toFixed(2)}</b></span> ${toEncoded} <br>
+			<h6> <span style="color: goldenrod">${fromEncoded}</span> to  <span style="color: goldenrod">${toEncoded}</span> conversion rate can now be accessed OFFLINE</h6>`;//displays result on html element with id 'convertResult'
+console.log("Query: ", query);
 			let exchRateObj = {
-				id: `${selectedFrom}_${selectedTo}`,
+				id: query,
 				rate:  Number(data[query]),
 				date: new Date().getTime(), //milliseconds
 			};
-			
 			//Adding exchange rate objects to the object store
 			addRateDB(exchRateObj);
 			//Delete record from database after 1hour
@@ -98,11 +100,11 @@ function convert(){
 		}).catch(jsonErr => {console.log("Error in parsing JSON data: ", jsonErr);})
 	}).catch(() => { //if fetch fails to retrieve from network:
 		console.log("Error in fetching from network, Checking for rate in IDB... ");
-		console.log(`${selectedFrom}_${selectedTo}`);
-		getRateDB(`${selectedFrom}_${selectedTo}`).then(val => {
+		console.log("ID/Query::: ", query);
+		getRateDB(query).then(val => {
 			let output = document.getElementById("toAmount");
-			output.value = Number(val)*amount;
-			document.getElementById('convertResult').innerHTML = `<i><span style="color: red">OFFLINE?</span> Rates will still be displayed!...</i><br> ${new Date()}:<br><span style="color: green">${amount}</span> ${selectedFrom} is equal to <span style="color:green"><b>${(val*amount).toFixed(2)}</b></span> ${selectedTo}`;//displays result on html element with id 'convertResult'
+			output.value = val*amount;
+			document.getElementById('convertResult').innerHTML = `<i><span style="color: red">OFFLINE?</span> Rates will still be displayed!...</i><br> ${new Date()}:<br><span style="color: green">${amount}</span> ${fromEncoded} is equal to <span style="color:green"><b>${(val*amount).toFixed(2)}</b></span> ${toEncoded}`;//displays result on html element with id 'convertResult'
 			console.log("SUCCESSFULLY RETRIEVED FROM DATABASE!!");
 			return;
 		}).catch(() => {
@@ -110,7 +112,8 @@ function convert(){
 			output.value = null;
 			document.getElementById('convertResult').innerHTML = "Are you OFFLINE? <br> Sorry result not in your local IDB yet. Please go back ONLINE asap so it can be updated for your next search";
 		})
-	 });
+	});
+	plotGraph();
 }
 
 //Swaps the FROM/TO selected currencies
@@ -127,12 +130,12 @@ function swap(){
 	let selectToText = toOption.text;
 
 	listFrom.options[listFrom.selectedIndex].text = selectToText;
-	selectedFrom = selectToText.slice(0, 3); //selects the id part to be used in conversion after swapping
+	selectedFrom = selectToText.slice(-4, -1); //selects the id part to be used in conversion after swapping
 
 	listTo.options[listTo.selectedIndex].text = selectFromText;
-	selectedTo = selectFromText.slice(0, 3); //selects the id part to be used in conversion after swapping
+	selectedTo = selectFromText.slice(-4, -1); //selects the id part to be used in conversion after swapping
 
-	clearToInput();// clear previous output value and result string underneath the convert button
+	clearToInput();// clear previous output value and result string & graph underneath the convert button
 
 	console.log("SWAPPED CURRENCIES SUCCESSFULLY!");
 }
@@ -141,6 +144,7 @@ function swap(){
 function clearToInput(){
 	document.getElementById("toAmount").value = null;
 	document.getElementById("convertResult").innerHTML = "";
+	document.getElementById("graph").innerHTML = "";
 }
 
 // //Get countries
