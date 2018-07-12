@@ -5,47 +5,63 @@ if (!('indexedDB' in window)) {
 
 //Creating the Database and the object store
 // Open a Database
-const dbPromise = idb.open('converterDB', 1, upgradeDb => {
+const dbPromise = idb.open('converterDB', 2, upgradeDb => {
     switch (upgradeDb.oldVersion){
         case 0:  // switch executes when the database is first created (oldVersion is 0)
         case 1:
             console.log('Creating the exchange rates objects store');
             upgradeDb.createObjectStore('rates', {keyPath: 'id'}) //Create the object store using the callback function. The id property is specified as the keyPath for the object store. Objects here must have an id property and the value must be unique.
-        }
+        case 2:
+        console.log('Creating the graph values objects store');
+        upgradeDb.createObjectStore('graph', {keyPath: 'id'}) //Create the object store using the callback function. The id property is specified as the keyPath for the object store. Objects here must have an id property and the value must be unique.
+    }
 });
 
-// Add rate to DB
-function addRateDB(exchRate){
+function addDB(store, exchRate){
     return dbPromise.then(db => {
-        let tx = db.transaction('rates', 'readwrite');
-        let rateStore = tx.objectStore('rates');
+        let tx = db.transaction(store, 'readwrite');
+        let rateStore = tx.objectStore(store);
         rateStore.add(exchRate);
         return tx.complete;	
     }).then(function(){
-        console.log("IDB: Exchange rate added successfully!");
+        if (store=='rates'){
+            console.log("IDB: Exchange rate added successfully!");
+        } else if(store=='graph'){
+            console.log("IDB: Graph values added successfully!");
+        }
     });
 }
 
-// Retrieves rate from IDB
-function getRateDB(key){
+// Retrieves rate/graph values from IDB
+function getDB(store, key){
     console.log("IDB: Getting rate: ", key)
 	return dbPromise.then(db => {
-		let tx = db.transaction('rates', 'readonly');
-		let rateStore = tx.objectStore('rates');
+		let tx = db.transaction(store, 'readonly');
+		let rateStore = tx.objectStore(store);
 		return rateStore.get(key);
 	}).then(val => {
-		return val.rate 
+        if (store=='rates'){
+            console.log("IDB: Exchange rate fetched from IDB successfully!");
+            return val.rate 
+        } else if(store=='graph'){
+            console.log("IDB: Graph values fetched from IDB successfully!");
+            return val.value
+        }
 	});
 }
 
-// Deletes rate from database after a specific time in secs
-function deleteRateDB(key){
+// Deletes rate/graph values from database after a specific time in secs
+function deleteDB(store, key){
     return dbPromise.then(db => {
-		let tx = db.transaction('rates', 'readwrite');
-		let rateStore = tx.objectStore('rates');
+		let tx = db.transaction(store, 'readwrite');
+		let rateStore = tx.objectStore(store);
         rateStore.delete(key);
         return tx.complete;
 	}).then(function(){
-        console.log("deleteRateDB: Rate deleted... Will be updated in IDB upon next fetch from network");
+        if (store=='rates'){
+            console.log("IDB: Rate deleted... Will be updated in IDB upon next fetch from network");
+        } else if(store=='graph'){
+            console.log("IDB: Graph values deleted... Will be updated in IDB upon next fetch from network");
+        }
     })
 }

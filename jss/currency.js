@@ -82,26 +82,24 @@ function convert(){
 	fetch(urlReq).then(resp => { 
 		return resp.json().then(data => { // Reads the response stream (resp) and  returns a promise that resolves with the result of parsing the JSON body text.
 			outputAmt.value = Number(data[query])*amount;
-			// document.getElementById('convertResult').innerHTML = `${new Date()}: <br> <span style="color: greenyellow">${amount}</span> ${fromEncoded} is equal to <span style="color:green"><b>${(Number(data[query])*amount).toFixed(2)}</b></span> ${toEncoded} <br>
 			document.getElementById('convertResult').innerHTML = `${new Date()}: <br> <span style="color: greenyellow">1</span> ${fromEncoded} is equal to <span style="color:greenyellow"><b>${(Number(data[query])).toFixed(2)}</b></span> ${toEncoded} <br>
 			<h6> <span style="color: goldenrod">${fromEncoded}</span> to  <span style="color: goldenrod">${toEncoded}</span> conversion rate can now be accessed OFFLINE</h6>`;//displays result on html element with id 'convertResult'
-console.log("Query: ", query);
+
 			let exchRateObj = {
 				id: query,
 				rate:  Number(data[query]),
 				date: new Date().getTime(), //milliseconds
 			};
 			//Adding exchange rate objects to the object store
-			addRateDB(exchRateObj);
+			addDB('rates', exchRateObj);
 			//Delete record from database after 1hour
 			setTimeout(() => {
-				deleteRateDB(exchRateObj.id);
+				deleteDB('rates', exchRateObj.id);
 			}, 60*60000);
 		}).catch(jsonErr => {console.log("Error in parsing JSON data: ", jsonErr);})
 	}).catch(() => { //if fetch fails to retrieve from network:
 		console.log("Error in fetching from network, Checking for rate in IDB... ");
-		console.log("ID/Query::: ", query);
-		getRateDB(query).then(val => {
+		getDB('rates', query).then(val => {
 			let output = document.getElementById("toAmount");
 			output.value = val*amount;
 			document.getElementById('convertResult').innerHTML = `<i><span style="color: red">OFFLINE?</span> Rates will still be displayed!...</i><br> ${new Date()}:<br><span style="color: green">${amount}</span> ${fromEncoded} is equal to <span style="color:green"><b>${(val*amount).toFixed(2)}</b></span> ${toEncoded}`;//displays result on html element with id 'convertResult'
@@ -113,6 +111,7 @@ console.log("Query: ", query);
 			document.getElementById('convertResult').innerHTML = "Are you OFFLINE? <br> Sorry result not in your local IDB yet. Please go back ONLINE asap so it can be updated for your next search";
 		})
 	});
+	console.log("Plotting Graph");
 	plotGraph();
 }
 
