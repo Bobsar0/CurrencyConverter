@@ -45,7 +45,7 @@ function getDB(store, key){
             return val.rate 
         } else if(store=='graph'){
             console.log("IDB: Graph values fetched from IDB successfully!");
-            return val.value
+            return val.data
         }
 	});
 }

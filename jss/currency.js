@@ -102,6 +102,7 @@ function convert(){
 		getDB('rates', query).then(val => {
 			let output = document.getElementById("toAmount");
 			output.value = val*amount;
+			console.log("::::", fromEncoded, query)
 			document.getElementById('convertResult').innerHTML = `<i><span style="color: red">OFFLINE?</span> Rates will still be displayed!...</i><br> ${new Date()}:<br><span style="color: green">${amount}</span> ${fromEncoded} is equal to <span style="color:green"><b>${(val*amount).toFixed(2)}</b></span> ${toEncoded}`;//displays result on html element with id 'convertResult'
 			console.log("SUCCESSFULLY RETRIEVED FROM DATABASE!!");
 			return;
@@ -113,6 +114,9 @@ function convert(){
 	});
 	console.log("Plotting Graph");
 	plotGraph();
+	$(window).resize(() => {
+		plotGraph();
+	});
 }
 
 //Swaps the FROM/TO selected currencies

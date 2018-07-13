@@ -14,6 +14,8 @@
     <link rel="stylesheet" href="./css/form.css">
     <link rel="stylesheet" href="./css/fontawesome/fontawesome-all.css">
     <link rel="manifest" href="./manifest.json">
+    <script src="./jss/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 
 </head>
@@ -50,23 +52,20 @@
             <input type="number" id="toAmount" placeholder="Click convert..." readonly>
             <select id="selectTo" onclick="getCurrencies()" onchange="clearToInput()"><!--JS function call inserts Currencies to convert TO here-->
             </select>
-
             <div>
             <button type="submit" class="convertbutton" id="convertButton" onclick="convert()">Convert</button></td>
             </div>
             <p id="convertResult"></p>
-
-            
         </div>
     </section>
     <section id="newsletter">
-        <div class="container" id="chartcontainer">
+        <!-- <div class="container"> -->
                 <!-- <form action="">
                     <input type="email" placeholder="Enter your email address ... ">
                     <button type="submit" class="button_1">Subscribe</button>
                 </form> -->
-                <div id="graph"></div>
-        </div>
+                <div class="chart" id="graph"></div>
+        <!-- </div> -->
     </section> 
     <section id="boxes"><!--Contains boxes to highlight features-->
         <div class="container">
@@ -91,7 +90,6 @@
                 <h3>Offline mode supported</h3>
                 <p></p>
             </div>
-
         </div>
     </section>
     <!--CONVERT-->
@@ -108,7 +106,6 @@
     <script src="./jss/currency.js"></script>
     <script type="text/javascript" src="./jss/jscharts.js"></script>
     <script src="./jss/graph.js"></script>
-
 
 </body>
 </html>
