@@ -14,13 +14,11 @@
     <link rel="stylesheet" href="./css/form.css">
     <link rel="stylesheet" href="./css/fontawesome/fontawesome-all.css">
     <link rel="manifest" href="./manifest.json">
-    <script src="./jss/jquery-3.3.1.min.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-
+    <script src="./jss/jquery-3.3.1.min.js" async></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" async></script>
 </head>
 <body onload="getCurrencies()">
-        <!-- contains top level bar of site with branding and navigation menu -->
+        <!-- contains top level bar of site with branding and navigation menu. -->
     <header> 
         <div class="container">
             <div id="branding">
@@ -53,19 +51,15 @@
             <select id="selectTo" onclick="getCurrencies()" onchange="clearToInput()"><!--JS function call inserts Currencies to convert TO here-->
             </select>
             <div>
-            <button type="submit" class="convertbutton" id="convertButton" onclick="convert()">Convert</button></td>
+                <button type="submit" class="convertbutton" id="convertButton" onclick="convert()">Convert</button></td>
             </div>
             <p id="convertResult"></p>
         </div>
     </section>
     <section id="newsletter">
-        <!-- <div class="container"> -->
-                <!-- <form action="">
-                    <input type="email" placeholder="Enter your email address ... ">
-                    <button type="submit" class="button_1">Subscribe</button>
-                </form> -->
-                <div class="chart" id="graph"></div>
-        <!-- </div> -->
+            <h1 id='initTitle' style='font-size: 45px; text-align:center; color:#32a0c2; text-shadow: 2px 2px 4px #000000; margin-top: 0px'>Chart of CONVERSION RATE over TIME appears here...</h1>
+            <h3 id='graphTitle' style='text-align: center; text-shadow: 2px 2px 4px #000000; margin-top: -20px'></h3>
+            <div class="chart" id="graph" style='margin: 0'></div>
     </section> 
     <section id="boxes"><!--Contains boxes to highlight features-->
         <div class="container">

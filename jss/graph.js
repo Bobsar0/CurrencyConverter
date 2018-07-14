@@ -9,7 +9,7 @@ function plotGraph(){
         alert(`Cannot generate graph of ${fromEncoded} to ${toEncoded} due to insignificant rate value`);
         return;
     }
-    const graphTitle=`Plot of ${fromEncoded} to ${toEncoded} (weekly duration)`;
+    const graphTitle=`PLOT of <span style='color: #32a0c2'>${fromEncoded}</span> to <span style='color: #32a0c2'>${toEncoded}</span><br><i>(over a weekly period)</i>`;
 
     //Get required Date format
     const d = new Date();
@@ -45,11 +45,7 @@ function plotGraph(){
             const entVal = Object.entries(data)[0][1];
             let valArray = Object.entries(entVal);
             console.log("valArr: ", valArray)//array of 7 arrays
-            // valArray.forEach(arr => {
-            //     // arr[0] = arr[0].toString();
-            //     // arr[1] = Number(Math.round(arr[1]+'e2')+'e-2'); //rounding number to 2 decimal places. Solves all rounding problems (eg 1.005 to 2 dec places being rounded to 1 instead of 1.01)
-            //     arr[1] = Number((arr[1]).toFixed(2)); //rounding number to 2 decimal places. Solves all rounding problems (eg 1.005 to 2 dec places being rounded to 1 instead of 1.01)
-            // })
+
             let nArr = [['Date', 'Rate']];
             for (let [k,v] of valArray){
                     nArr.push([k,v])//Inserts date and val rather than index and val to be used in plot
@@ -89,33 +85,34 @@ function plot(arr, titl){
       function drawChart() {
         const data = google.visualization.arrayToDataTable(arr);
         const options = {
-            backgroundColor: '#353637',
+            backgroundColor: {fill: '#353637'},
+            colors : ['red'],
+            crosshair: {trigger: 'both', color:'black', opacity: 0.3},
             hAxis : {
                 title: 'Dates',
-                titleTextStyle: {
-                  color: '#FFFFFF'
-                },
+                titleTextStyle: {color: '#FFFFFF'},
+                textStyle: {color: '#32a0c2'},
                 baselineColor: '#32a0c2',
-                gridlines: {color: '#32a0c2', count: -1},
+                gridlines: {color: 'white', count: 7},
+                // slantedText: true, slantedTextAngle: 20
             },  
             vAxis : {
-                title: 'Dates',
-                titleTextStyle: {
-                  color: '#FFFFFF'
-                },
+                title: 'Rates',
+                titleTextStyle: {color: '#FFFFFF'},
                 baselineColor: '#32a0c2',
-                gridlines: {color: '#32a0c2', count: 3},
+                gridlines: {color: '#32a0c2', count: 5},
+                textStyle: {color: '#32a0c2'},
             },        
-
-            title: titl,
-            titleTextStyle: {color: '#FFFFFF', fontSize: 12},
-            tooltip: {textStyle: {color: '#FF0000'}, showColorCode: true},
-            
-        //   curveType: 'function',
+            selectionMode: 'multiple',
+            // title:titl,
+            // titleTextStyle: {color: '#FFFFFF', fontSize: 16},
+            tooltip: {textStyle: {color: 'green'}, showColorCode: true},
             // legend: { position: 'bottom' }
         };
-
-        let chart = new google.visualization.LineChart(document.getElementById('graph'));
+        const chart = new google.visualization.LineChart(document.getElementById('graph'));
+        document.getElementById('initTitle').innerHTML = '';
+        document.getElementById('graphTitle').innerHTML = titl;
+    
         chart.draw(data, options);
       }
 }

@@ -17,6 +17,7 @@ const dbPromise = idb.open('converterDB', 2, upgradeDb => {
     }
 });
 
+//To add contents to a store
 function addDB(store, exchRate){
     return dbPromise.then(db => {
         let tx = db.transaction(store, 'readwrite');
@@ -57,9 +58,9 @@ function deleteDB(store, key){
 		let rateStore = tx.objectStore(store);
         rateStore.delete(key);
         return tx.complete;
-	}).then(function(){
+	}).then(() => {
         if (store=='rates'){
-            console.log("IDB: Rate deleted... Will be updated in IDB upon next fetch from network");
+            alert(`${key} rate value deleted from your database. Value will be updated upon access from network`);
         } else if(store=='graph'){
             console.log("IDB: Graph values deleted... Will be updated in IDB upon next fetch from network");
         }
