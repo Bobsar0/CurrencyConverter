@@ -1,24 +1,29 @@
 {
     "name": "Currency Converter",
     "short_name": "Swift Converter",
-    "description": "AlcwithGoogle3.0 challenge project.",
+    "description": "A Progressive Web App that finds the conversion rate between two countries. Accomplished as part of the AlcwithGoogle3.0 challenge project.",
     "start_url": ".",
     "lang": "en-US",
     "background_color": "#353637",
     "display": "standalone",
-    "scope": "/currencyconverter/",
+    "scope": "/CurrencyConverter/",
     "theme_color": "#32a0c2",
 
     "icons": [
       {
-        "src": "./img/headerbg.png",
+        "src": "./img/swap5.png",
         "type": "image/png",
-        "sizes": "512x512"
+        "sizes": "50x50"
       },
       {
         "src": "./img/swap5.png",
         "type": "image/png",
         "sizes": "192x192"
+      },
+      {
+        "src": "./img/headerbg.png",
+        "type": "image/png",
+        "sizes": "512x512"
       }
     ]
 }

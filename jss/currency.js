@@ -84,7 +84,6 @@ function convert(){
 			outputAmt.value = Number(data[query])*amount;
 			document.getElementById('convertResult').innerHTML = `${new Date()}: <br> <span style="color: greenyellow">1</span> ${fromEncoded} is equal to <span style="color:greenyellow"><b>${(Number(data[query])).toFixed(2)}</b></span> ${toEncoded} <br>
 			<h6> <span style="color: goldenrod">${fromEncoded}</span> to  <span style="color: goldenrod">${toEncoded}</span> conversion rate can now be accessed OFFLINE</h6>`;//displays result on html element with id 'convertResult'
-
 			let exchRateObj = {
 				id: query,
 				rate:  Number(data[query]),
@@ -102,7 +101,6 @@ function convert(){
 		getDB('rates', query).then(val => {
 			let output = document.getElementById("toAmount");
 			output.value = val*amount;
-			console.log("::::", fromEncoded, query)
 			document.getElementById('convertResult').innerHTML = `<i><span style="color: red">OFFLINE?</span> Rates will still be displayed!...</i><br> ${new Date()}:<br><span style="color: green">${amount}</span> ${fromEncoded} is equal to <span style="color:green"><b>${(val*amount).toFixed(2)}</b></span> ${toEncoded}`;//displays result on html element with id 'convertResult'
 			console.log("SUCCESSFULLY RETRIEVED FROM DATABASE!!");
 			return;
