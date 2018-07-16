@@ -14,11 +14,11 @@
     <link rel="stylesheet" href="./css/form.css">
     <link rel="stylesheet" href="./css/fontawesome/fontawesome-all.css">
     <link rel="manifest" href="./manifest.json">
-    <script src="./jss/jquery-3.3.1.min.js" async></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" async></script>
+    <script src="./jss/chart/jquery-3.3.1.js" defer></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" defer></script>
 </head>
-<body onload="getCurrencies()">
-        <!-- contains top level bar of site with branding and navigation menu. -->
+<body>
+        <!-- contains top-level bar of site with branding and navigation menu. -->
     <header> 
         <div class="container">
             <div id="branding">
@@ -92,14 +92,25 @@
         <p>Sponsored by: <span style="color: royalblue">G </span><span style="color: red">o </span><span style="color: orange">o </span><span style="color: royalblue">g </span><span style="color: green">l </span><span style="color: red">e </span> | 
             <span style="color:royalblue">U d a c i t y</span>  |
             Andela Learning Community </p>
-        <p>Powered by:  <i>The Free Currency Converter API</i></p></p>
+        <p>Powered by:  <i>The Free Currency Converter API</i></p>
+        <p>Follow me on <i class="fab fa-github"></i><a href="https://github.com/Bobsar0">Github</a>, 
+            <i class="fab fa-linkedin"></i><a href="https://linkedin.com/in/SteveOnyeneke">LinkedIn</a> and 
+            <i class="fab fa-twitter"></i><a href="">Twitter</a>
+        </p>
     </footer>
-    <script src="./jss/idb.js"></script>
-    <script src="./jss/maindb.js" asnyc></script>
-    <script src="./sw.js"></script>
-    <script src="./jss/currency.js"></script>
-    <script type="text/javascript" src="./jss/jscharts.js"></script>
-    <script src="./jss/graph.js"></script>
-
+<!-- Load Service Worker script -->
+<script src="./sw.js"></script>
+<!-- Load scripts for IndexedDB interaction functions -->
+<script src="./jss/idb.js"></script>
+<script src="./jss/maindb.js"></script>
+<!-- Load script for Getting Currencies & Currency Conversion -->
+<script src="./jss/currency.js"></script>
+<!-- Load scripts for plotting Graph -->
+<script type="text/javascript" src="./jss/chart/jscharts.js"></script>
+<script src="./jss/chart/graph.js"></script>
+<script>
+    // Initialize Controller
+    initController();
+</script>
 </body>
 </html>
