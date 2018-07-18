@@ -141,7 +141,7 @@ function populateSelect(currencies){
 		// console.log("Values ENTRY: ", Object.values(entry))
 		// console.log(entry.value.currencyName)
 		const currencyListFrom_To = document.createElement('option'); //create new instance of list element
-		currencyListFrom_To.textContent = `${entry.value.currencyName}(${entry.value.id})`; //updates the html content of the currency list created based on length of array as determined by the line above
+		currencyListFrom_To.textContent = `${entry.value.currencyName} (${entry.value.id})`; //updates the html content of the currency list created based on length of array as determined by the line above
 		currencyListFrom_To.value = entry.value.id
 		
 		document.querySelector('select#selectFrom').appendChild(currencyListFrom_To); //adds new currency list to the list of currencies to convert from
@@ -157,8 +157,8 @@ function populateSelect(currencies){
  * @returns exchange rate
  */
 function convert(){
-	const selectFrom = document.querySelector('select#selectFrom'); // returns the select Element within the HTML document with id="currencies"
-	const selectTo= document.querySelector('select#selectTo'); // returns the select Element within the HTML document with id="currencies"
+	const selectFrom = document.querySelector('select#selectFrom').value; // returns the select Element within the HTML document with id="currencies"
+	const selectTo= document.querySelector('select#selectTo').value; // returns the select Element within the HTML document with id="currencies"
 			
 	const inputAmt = document.getElementById("fromAmount");
 	const amount = inputAmt.value; //gets the amount entered by user
