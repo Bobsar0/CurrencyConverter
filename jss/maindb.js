@@ -11,11 +11,9 @@ function openDB(){
         switch (upgradeDb.oldVersion){
             case 0:  // switch executes when the database is first created (oldVersion is 0)
             case 1:
-                console.log('Creating the exchange rates objects store');
                 upgradeDb.createObjectStore('rates', {keyPath: 'id'}) //Create the object store using the callback function. The id property is specified as the keyPath for the object store. Objects here must have an id property and the value must be unique.
-                upgradeDb.createObjectStore('currencies', {keyPath: 'currencyName'}) //Create the object store using the callback function. The id property is specified as the keyPath for the object store. Objects here must have an id property and the value must be unique.
+                upgradeDb.createObjectStore('currencies', {keyPath: 'id'}) //Create the object store using the callback function. The id property is specified as the keyPath for the object store. Objects here must have an id property and the value must be unique.
             case 2:
-            console.log('Creating the graph values objects store');
             upgradeDb.createObjectStore('graph', {keyPath: 'id'}) //Create the object store using the callback function. The id property is specified as the keyPath for the object store. Objects here must have an id property and the value must be unique.
         }
     });
@@ -31,8 +29,6 @@ function openDB(){
  * @returns Rate or Data from the store
  */
 function addDB(store, entry){
-    console.log("IDB: Adding entry: ", key)
-
     const dbPromise = openDB();
     return dbPromise.then(db => {
         let tx = db.transaction(store, 'readwrite');
@@ -60,14 +56,13 @@ function addDB(store, entry){
 function getDB(store, key){
     console.log("IDB: Getting val: ", key)
     const dbPromise = openDB();
-    console.log("IDB: DB opened: ", store)
 	return dbPromise.then(db => {
-		let tx = db.transaction(store, 'readonly');
-        let rateStore = tx.objectStore(store);
+		const tx = db.transaction(store, 'readonly');
+        let Store = tx.objectStore(store);
         if (store=='currencies'){
-            return rateStore.getAll()
+            return Store.getAll()
         }
-		return rateStore.get(key);
+		return Store.get(key);
 	}).then(val => {
         if (store=='rates'){
             console.log("IDB: Exchange rate fetched from IDB successfully!");

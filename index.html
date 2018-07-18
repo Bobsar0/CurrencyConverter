@@ -17,6 +17,7 @@
     <script src="./jss/chart/jquery-3.3.1.js" defer></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" defer></script>
 </head>
+
 <body>
         <!-- contains top-level bar of site with branding and navigation menu. -->
     <header> 
@@ -39,7 +40,7 @@
                 
             <button class="from">From</button>
             <input type="number" id="fromAmount" placeholder=1 value=1 oninput="convert()">
-            <select id="selectFrom" onclick="getCurrencies()" onchange="clearToInput()"> <!--JS function call inserts Currencies to convert FROM as options-->
+            <select id="selectFrom" onchange="clearToInput()"> <!--JS function call inserts Currencies to convert FROM as options-->
             </select>
             <div class="swap"> 
                 <button class="swapBtn" onclick="return swap()" title="Click to swap currencies">
@@ -47,8 +48,8 @@
                 </button>
             </div>
             <button class="to">To </button>
-            <input type="number" id="toAmount" placeholder="Click convert..." readonly>
-            <select id="selectTo" onclick="getCurrencies()" onchange="clearToInput()"><!--JS function call inserts Currencies to convert TO here-->
+            <input type="number" id="toAmount" placeholder="Click convert button..." readonly>
+            <select id="selectTo"  onchange="clearToInput()"><!--JS function call inserts Currencies to convert TO here-->
             </select>
             <div>
                 <button type="submit" class="convertbutton" id="convertButton" onclick="convert()">Convert</button></td>

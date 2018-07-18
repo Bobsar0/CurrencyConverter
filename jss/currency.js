@@ -30,6 +30,7 @@ function initController() {
 				console.log("SW waiting!");
 				return getDB('currencies').then(allCurrencies => {
 					sortCurrencies(allCurrencies)
+					console.log('currency.js: ALL CURRENCIES RETURNED SUCCESSFULLY: ', allCurrencies)
 				})
 			}
 			// If there's an installing SW, then it's loading for the first time
@@ -40,21 +41,24 @@ function initController() {
 				fetch(`https://free.currencyconverterapi.com/api/v5/currencies`).then(resp => {
 					return resp.json().then(currencies => {
 						const currencyObj = Object.entries(currencies.results);
-						sortCurrencies(currencyObj);
+						sorted = sortCurrencies(currencyObj);
 						//Add to database
 						currencyObj.map(currency => {
 							currency = {
-								id: currency[0],
+								id: currency[1].currencyName,
 								value: currency[1],
 							};
 							addDB('currencies', currency)
 						});
+						console.log("Add successful!!!!: ", currencyObj)
+
 					}); 
 				});           
 				//If there is a change in the state of the installing SW
 				reg.installing.addEventListener('statechange', () => {
 					console.log("SW Installing changed state...")
 					if (this.state === 'installed') {//retrieve currencies from database
+						console.log("SW Installed!...")
 						return getDB('currencies').then(allCurrencies => {
 							populateSelect(allCurrencies)
 						})
@@ -79,36 +83,36 @@ and populates the currency select-option element
 * @param object Array of Currency object (entries)
 * @returns Sorted array of Currency object. [[ID1, {currency Object1}], [ID2, {currency Object2}],... ]
 */
-function getCurrencies(){
-	//Attempt to fetch from idb
-	return getDB('currencies').then(allCurrencies => {
-		sortCurrencies(allCurrencies) //sorts and populates currency select fields
-	}).catch(() => {
-		// const urlReq = new Request(`https://free.currencyconverterapi.com/api/v5/currencies`); //creates a new Request object with the url to retrieve currencies from the api passed into it
-		fetch(`https://free.currencyconverterapi.com/api/v5/currencies`).then(urlResp => { //Fetch urlReq resources from the network. This returns a Promise that resolves to the Response (urlResp) to that request
-			return urlResp.json().then(currencies => {
-				//console.log("Currencies", currencies); //to check contents of currencies object 
-				const entries = Object.entries(currencies.results);
-				//sort by currencyName using compare function
-				console.log("Entries:: ", entries)
-				//Add to DB
-				const sorted = sortCurrencies(entries);
-				sorted.map(currency => {
-					currency = {
-						id: currency[0],
-						value: currency[1],
-					};
-					addDB('currencies', currency)
-				});
-				populateSelect(sorted)
-			}).catch(function(jsonErr){
-				console.log("getCurrencies: Error in parsing JSON data: ", jsonErr);
-			});
-		});
-	})
-}
+// function getCurrencies(){
+// 	//Attempt to fetch from idb
+// 	return getDB('currencies').then(allCurrencies => {
+// 		sortCurrencies(allCurrencies) //sorts and populates currency select fields
+// 	}).catch(() => {
+// 		// const urlReq = new Request(`https://free.currencyconverterapi.com/api/v5/currencies`); //creates a new Request object with the url to retrieve currencies from the api passed into it
+// 		fetch(`https://free.currencyconverterapi.com/api/v5/currencies`).then(urlResp => { //Fetch urlReq resources from the network. This returns a Promise that resolves to the Response (urlResp) to that request
+// 			return urlResp.json().then(currencies => {
+// 				//console.log("Currencies", currencies); //to check contents of currencies object 
+// 				const entries = Object.entries(currencies.results);
+// 				//sort by currencyName using sort function
+// 				console.log("Entries:: ", entries)
+// 				const sorted = sortCurrencies(entries);
+// 				sorted.map(currency => {
+// 					currency = {
+// 						id: currency[0],
+// 						value: currency[1],
+// 					};
+// 					//Add to DB
+// 					addDB('currencies', currency)
+// 				});
+// 				populateSelect(sorted)
+// 			}).catch(function(jsonErr){
+// 				console.log("getCurrencies: Error in parsing JSON data: ", jsonErr);
+// 			});
+// 		});
+// 	})
+// }
 
-/**
+/*
  * @function sortCurrencies
  * @description Sorts Currency list 
  * @param object Array of Currency object (entries)
@@ -132,10 +136,13 @@ function sortCurrencies(currencies) {
 * @returns null
 */
 function populateSelect(currencies){
+	console.log('Currencies: ', currencies)
 	currencies.forEach(entry => {
+		// console.log("Values ENTRY: ", Object.values(entry))
+		// console.log(entry.value.currencyName)
 		const currencyListFrom_To = document.createElement('option'); //create new instance of list element
-		currencyListFrom_To.textContent = `<b>${entry[1].currencyName} </b><span style='color: #32a0c2'>(${entry[1].id})</span>`; //updates the html content of the currency list created based on length of array as determined by the line above
-		currencyListFrom_To.value = entry[1].id
+		currencyListFrom_To.textContent = `${entry.value.currencyName}(${entry.value.id})`; //updates the html content of the currency list created based on length of array as determined by the line above
+		currencyListFrom_To.value = entry.value.id
 		
 		document.querySelector('select#selectFrom').appendChild(currencyListFrom_To); //adds new currency list to the list of currencies to convert from
 		document.querySelector('select#selectTo').appendChild(currencyListFrom_To.cloneNode(true)); //adds new currency list to the list of currencies to convert to
