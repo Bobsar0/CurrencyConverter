@@ -40,6 +40,7 @@ function initController() {
 						const currencyObj = Object.values(currencies.results);
 						//Sort and Add currencies to database
 						sorted = sortCurrencies(currencyObj)
+						populateSelect(sorted);
 						sorted.map(currency => {
 							addDB('currencies', currency)
 							console.log('Added currency to db: ', currency)
@@ -53,7 +54,7 @@ function initController() {
 						
 						setTimeout(() => {
 							window.location.reload();
-						}, 1000);
+						}, 1500);
 						return getDB('currencies').then(allCurrencies => {
 							populateSelect(allCurrencies)
 						});
