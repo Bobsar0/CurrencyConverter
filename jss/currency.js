@@ -53,7 +53,7 @@ function initController() {
 						
 						setTimeout(() => {
 							window.location.reload();
-						}, 100);
+						}, 500);
 						return getDB('currencies').then(allCurrencies => {
 							populateSelect(allCurrencies)
 						});
