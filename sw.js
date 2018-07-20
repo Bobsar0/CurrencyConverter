@@ -3,7 +3,7 @@
 // The ServiceWorker is registered in the controller file
 
 // Creating the cache and adding items to it
-let staticCacheName = 'converter-v2'; //TO-DO: VERSIONING
+const staticCacheName = 'converter-v2'; //TO-DO: VERSIONING
 
 // On the ServiceWorker install event - We cache the HTML, CSS, JS, and any files that make up the application shell. Also cache the currency store from the API URL to quickly populate list of currencies upon document load:
 // This event listener triggers when the ServiceWorker is first installed
@@ -16,17 +16,15 @@ self.addEventListener('install', event => {
         './jss/maindb.js',
         './jss/controller.js',
         './jss/currency.js',
-        './jss/chart/',
-        // './jss/graph.js',
-        // './jss/jquery-3.3.1.min.js',
+        './jss/chart/graph.js',
+        './jss/chart/jquery-3.3.1.min.js',
         './css/style.css',
         './css/form.css',
         './css/fontawesome/fontawesome-all.css',
         './css/webfonts/',
         './img/headerbg.png',
         './img/swap5.png',
-        
-        // 'https://free.currencyconverterapi.com/api/v5/currencies',
+        'https://free.currencyconverterapi.com/api/v5/currencies',
         // 'https://www.gstatic.com/charts/loader.js'
     ];
     event.waitUntil(
@@ -41,10 +39,10 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(cacheNames => { //retrieve all cache names
-            //Filter and delete previous currency converter cache
+            //Filter and delete previous currency converter cache(s)
             return Promise.all(
                 cacheNames.filter(cacheName => {
-                    return cacheName.startsWith('converter') && cacheName != staticCacheName;
+                    return cacheName.startsWith('converter-') && cacheName != staticCacheName;
                 }).map(cacheName => {
                     return caches.delete(cacheName);
                 })
@@ -58,19 +56,29 @@ self.addEventListener('activate', event => {
 self.addEventListener('fetch', event => {
     event.respondWith(  
         caches.open(staticCacheName).then(cache => {
-            return caches.match(event.request.url).then(function(response){
+            return cache.match(event.request.url).then(response => {
                 if (response){ //If matching response is found in cache
-                    console.log("SW: Entry found in cache!!!");	
+                    console.log("SW: Entry found in cache for request URL: ",event.request.url);	
                     return response;
                 }
                 //Attempt to fetch from network if the item is not matched in cache
-                return fetch(event.request)
-                // return fetch(event.request).then(function(resp){ //Otherwise, fetch from network
-                //     if (resp.status === 404){
-                //         console.log("SW: 404 error! Displaying custom image...")
-                //         fetch('./img/404.gif'); //return custom 404 page
-                //     }
-                // }).catch(err=>console.log("SW fetch from network: Failed!", err)) 
+                // return fetch(event.request)
+                return fetch(event.request).then(resp => { //Otherwise, fetch from network
+                    if (resp.status == 404){
+                        console.log("SW: 404 error! Displaying custom image...")
+                        // return fetch('./img/404.gif'); //return custom 404 page or...
+                        return new Response(`<div style="min-height:400px; background:url('./img/headerbg.png') no-repeat center;
+                                                background-size:cover; text-align: center; color: #fcfcfc">
+                                                <div style='margin-top: 40px'><h1 style="margin-top: 40px; font-size: 35px; margin-bottom: 10px; text-shadow: 2px 2px 4px #000000";>
+                                                    SORRY<br><br>The page you are trying to access does not exist anywhere in this Universe!...</h1>
+                                                </div>
+                                            </div>
+                                            <div><h3>Please click <a href="./">HERE</a> to return to the Home Page</h3></div>`,
+                            {headers: {'content-type': 'text/html'}}
+                        )
+                    }
+                    return resp;
+                })
             });
         })    
     );

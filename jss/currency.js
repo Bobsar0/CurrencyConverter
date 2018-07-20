@@ -7,8 +7,6 @@
 //*********************************************************************************************************************************************************/
 
 /**
- * @author Steve Onyeneke
- * @version 2.0
  * @function initServiceWorker
  * @description Initializes the Service Worker and handles its Registration Event Listeners
  * @param null
@@ -27,41 +25,38 @@ function initController() {
 			console.log("SW successfully registered");
 			// If there's a waiting SW, bypass network & fetch currency list from IndexedDB
 			if (reg.waiting) {
-				console.log("SW waiting!");
+				console.log("SW ready and waiting to take over!");
 				return getDB('currencies').then(allCurrencies => {
-					sortCurrencies(allCurrencies)
-					console.log('currency.js: ALL CURRENCIES RETURNED SUCCESSFULLY: ', allCurrencies)
+					populateSelect(allCurrencies);
 				})
 			}
 			// If there's an installing SW, then it's loading for the first time
-			// Fetch currency list from API, then add to database
+			// Fetch currency list from API, then store in IDB
 			else if (reg.installing) {
+				let sw = reg.installing;
 				console.log("SW Installing..")
-				// const req = new Request(`https://free.currencyconverterapi.com/api/v5/currencies`); //creates a new Request object with the url to retrieve currencies from the api passed into it
 				fetch(`https://free.currencyconverterapi.com/api/v5/currencies`).then(resp => {
 					return resp.json().then(currencies => {
-						const currencyObj = Object.entries(currencies.results);
-						sorted = sortCurrencies(currencyObj);
-						//Add to database
-						currencyObj.map(currency => {
-							currency = {
-								id: currency[1].currencyName,
-								value: currency[1],
-							};
+						const currencyObj = Object.values(currencies.results);
+						//Sort and Add currencies to database
+						sorted = sortCurrencies(currencyObj)
+						sorted.map(currency => {
 							addDB('currencies', currency)
+							console.log('Added currency to db: ', currency)
 						});
-						console.log("Add successful!!!!: ", currencyObj)
-
 					}); 
 				});           
 				//If there is a change in the state of the installing SW
 				reg.installing.addEventListener('statechange', () => {
-					console.log("SW Installing changed state...")
-					if (this.state === 'installed') {//retrieve currencies from database
-						console.log("SW Installed!...")
+					if (sw.state === 'installed') {//retrieve currencies from database
+						console.log("SW Installed!...Reloading window to activate")
+						
+						setTimeout(() => {
+							window.location.reload();
+						}, 100);
 						return getDB('currencies').then(allCurrencies => {
 							populateSelect(allCurrencies)
-						})
+						});
 					}
 				});
 			}
@@ -76,79 +71,40 @@ function initController() {
 		});
 	}
 }
-/**
-* @function getCurrencies
-* @description Fetches sorted Currency list from IDB(offline-first) or API if not present
-and populates the currency select-option element
-* @param object Array of Currency object (entries)
-* @returns Sorted array of Currency object. [[ID1, {currency Object1}], [ID2, {currency Object2}],... ]
-*/
-// function getCurrencies(){
-// 	//Attempt to fetch from idb
-// 	return getDB('currencies').then(allCurrencies => {
-// 		sortCurrencies(allCurrencies) //sorts and populates currency select fields
-// 	}).catch(() => {
-// 		// const urlReq = new Request(`https://free.currencyconverterapi.com/api/v5/currencies`); //creates a new Request object with the url to retrieve currencies from the api passed into it
-// 		fetch(`https://free.currencyconverterapi.com/api/v5/currencies`).then(urlResp => { //Fetch urlReq resources from the network. This returns a Promise that resolves to the Response (urlResp) to that request
-// 			return urlResp.json().then(currencies => {
-// 				//console.log("Currencies", currencies); //to check contents of currencies object 
-// 				const entries = Object.entries(currencies.results);
-// 				//sort by currencyName using sort function
-// 				console.log("Entries:: ", entries)
-// 				const sorted = sortCurrencies(entries);
-// 				sorted.map(currency => {
-// 					currency = {
-// 						id: currency[0],
-// 						value: currency[1],
-// 					};
-// 					//Add to DB
-// 					addDB('currencies', currency)
-// 				});
-// 				populateSelect(sorted)
-// 			}).catch(function(jsonErr){
-// 				console.log("getCurrencies: Error in parsing JSON data: ", jsonErr);
-// 			});
-// 		});
-// 	})
-// }
 
-/*
+/**
  * @function sortCurrencies
  * @description Sorts Currency list 
- * @param object Array of Currency object (entries)
+ * @param required currencies: Array of Currency object
  * @returns Sorted array of Currency object. [[ID1, {currency Object1}], [ID2, {currency Object2}],... ]
  */
 function sortCurrencies(currencies) {
-	// const entries = Object.entries(currencyObj);
 	//sort by currencyName using compare function
 	return currencies.sort((a, b) => {
-		let currencyA = a[1].currencyName.toUpperCase(); //ignore casing
-		let currencyB = b[1].currencyName.toUpperCase(); //ignore casing
+		let currencyA = a.currencyName; //ignore casing
+		let currencyB = b.currencyName; //ignore casing
 		if (currencyA < currencyB){return -1;} //currency A comes first
-		if (currencyA > currencyB){return 1;} //name B comes first
+		if (currencyA > currencyB){return 1;} //currency B comes first
 		return 0; //names must be equal
 	})
 }
 /**
 * @function populateSelect
-* @description Populates the currency select-option element
-* @param object Array of Currency object (entries)
+* @description Populates the currency select-option element with the currencies sorted in alphabetical order
+* @param required currencies: Array of Currency object
 * @returns null
 */
 function populateSelect(currencies){
-	console.log('Currencies: ', currencies)
+	// const sortedCurrencies = sortCurrencies(currencies)
 	currencies.forEach(entry => {
-		// console.log("Values ENTRY: ", Object.values(entry))
-		// console.log(entry.value.currencyName)
 		const currencyListFrom_To = document.createElement('option'); //create new instance of list element
-		currencyListFrom_To.textContent = `${entry.value.currencyName}(${entry.value.id})`; //updates the html content of the currency list created based on length of array as determined by the line above
-		currencyListFrom_To.value = entry.value.id
+		currencyListFrom_To.textContent = `${entry.currencyName} (${entry.id})`; //updates the html content of the currency list created based on length of array as determined by the line above
+		currencyListFrom_To.value = entry.id
 		
 		document.querySelector('select#selectFrom').appendChild(currencyListFrom_To); //adds new currency list to the list of currencies to convert from
 		document.querySelector('select#selectTo').appendChild(currencyListFrom_To.cloneNode(true)); //adds new currency list to the list of currencies to convert to
 	})
 }
-
 
 /**
  * @function convert
@@ -157,8 +113,8 @@ function populateSelect(currencies){
  * @returns exchange rate
  */
 function convert(){
-	const selectFrom = document.querySelector('select#selectFrom'); // returns the select Element within the HTML document with id="currencies"
-	const selectTo= document.querySelector('select#selectTo'); // returns the select Element within the HTML document with id="currencies"
+	const selectFrom = document.querySelector('select#selectFrom').value; // returns the select Element within the HTML document with id="currencies"
+	const selectTo= document.querySelector('select#selectTo').value; // returns the select Element within the HTML document with id="currencies"
 			
 	const inputAmt = document.getElementById("fromAmount");
 	const amount = inputAmt.value; //gets the amount entered by user
@@ -172,7 +128,8 @@ function convert(){
 	fetch(urlReq).then(resp => { 
 		return resp.json().then(data => { // Reads the response stream (resp) and  returns a promise that resolves with the result of parsing the JSON body text.
 			outputAmt.value = Number(data[query])*amount;
-			document.getElementById('convertResult').innerHTML = `${new Date()}: <br> <span style="color: greenyellow">1</span> ${selectFrom} is equal to <span style="color:greenyellow"><b>${(Number(data[query])).toFixed(2)}</b></span> ${selectTo} <br>
+
+			document.getElementById('convertResult').innerHTML = `${new Date()}: <br> <span style="color: greenyellow">1</span> ${selectFrom} is equal to <span style="color:greenyellow"><b>${((Number(data[query])).toFixed(2).toString()).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</b></span> ${selectTo} <br>
 			<h6> <span style="color: goldenrod">${selectFrom}</span> to  <span style="color: goldenrod">${selectTo}</span> conversion rate can now be accessed OFFLINE</h6>`;//displays result on html element with id 'convertResult'
 			
 			const exchRateObj = {
@@ -193,7 +150,6 @@ function convert(){
 			const output = document.getElementById("toAmount");
 			output.value = val*amount;
 			document.getElementById('convertResult').innerHTML = `<i><span style="color: red">OFFLINE?</span> Rates will still be displayed!...</i><br> ${new Date()}:<br><span style="color: green">${amount}</span> ${selectFrom} is equal to <span style="color:green"><b>${(val*amount).toFixed(2)}</b></span> ${selectTo}`;//displays result on html element with id 'convertResult'
-			console.log("SUCCESSFULLY RETRIEVED FROM DATABASE!!");
 			return;
 		}).catch(() => {
 			const output = document.getElementById("toAmount");
@@ -201,7 +157,7 @@ function convert(){
 			document.getElementById('convertResult').innerHTML = "Are you OFFLINE? <br> Sorry result not in your local IDB yet. Please go back ONLINE asap so it can be updated for your next search";
 		})
 	});
-	console.log("Plotting Graph");
+	console.log("Plotting Graph...");
 	plotGraph(selectFrom, selectTo);
 	$(window).resize(() => { //controls responsiveness of graph during screen resize - jQuery
 		plotGraph(selectFrom, selectTo);
@@ -219,14 +175,18 @@ function swap(){
     let listFrom = document.querySelector('select#selectFrom'); // returns the select Element within the HTML document with id="currencies"
 	let listTo= document.querySelector('select#selectTo'); // returns the select Element within the HTML document with id="currencies"
 	// SWAP
-	temp = listFrom.options[listFrom.selectedIndex]
+	const tempText = listFrom.options[listFrom.selectedIndex].text;
+	const tempVal = listFrom.options[listFrom.selectedIndex].value;
+
 	listFrom.options[listFrom.selectedIndex].text = listTo.options[listTo.selectedIndex].text;
 	listFrom.options[listFrom.selectedIndex].value = listTo.options[listTo.selectedIndex].value;
 
-	listTo.options[listTo.selectedIndex].text= temp.text;
-	listTo.options[listTo.selectedIndex].value = temp.value;
+	listTo.options[listTo.selectedIndex].text= tempText;
+	listTo.options[listTo.selectedIndex].value = tempVal;
+	console.log(tempText, tempVal);
 
 	clearToInput();// clear previous output value and result string & graph underneath the convert button
+	convert();
 	console.log("SWAPPED CURRENCIES SUCCESSFULLY!");
 }
 /**

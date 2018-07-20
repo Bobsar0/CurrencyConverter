@@ -6,13 +6,14 @@
  * @param null
  * @returns IDB Object (with promise)
  */
-function openDB(){
+ const dbPromise = openDB();
+ function openDB(){
     const dbPromise = idb.open('converterDB', 2, upgradeDb => {
         switch (upgradeDb.oldVersion){
             case 0:  // switch executes when the database is first created (oldVersion is 0)
             case 1:
                 upgradeDb.createObjectStore('rates', {keyPath: 'id'}) //Create the object store using the callback function. The id property is specified as the keyPath for the object store. Objects here must have an id property and the value must be unique.
-                upgradeDb.createObjectStore('currencies', {keyPath: 'id'}) //Create the object store using the callback function. The id property is specified as the keyPath for the object store. Objects here must have an id property and the value must be unique.
+                upgradeDb.createObjectStore('currencies', {keyPath: 'currencyName'}) //Create the object store using the callback function. The id property is specified as the keyPath for the object store. Objects here must have an id property and the value must be unique.
             case 2:
             upgradeDb.createObjectStore('graph', {keyPath: 'id'}) //Create the object store using the callback function. The id property is specified as the keyPath for the object store. Objects here must have an id property and the value must be unique.
         }
@@ -21,20 +22,18 @@ function openDB(){
 }
 
 /**
- * @author Steve Onyeneke
- * @function openDB
+ * @function addDB
  * @description Adds an entry to the corresponding store
- * @param string IDB store to be transacted upon
- * @param string entry
+ * @param required store: IDB store to be transacted upon (string)
+ * @param required entry: data to be added to store (string)
  * @returns Rate or Data from the store
  */
 function addDB(store, entry){
-    const dbPromise = openDB();
-    return dbPromise.then(db => {
+    dbPromise.then(db => {
         let tx = db.transaction(store, 'readwrite');
-        let rateStore = tx.objectStore(store);
-        rateStore.add(entry);
-        return tx.complete;	
+        let entryStore = tx.objectStore(store);
+				entryStore.add(entry);
+				return tx.complete
     }).then(() => {
         if (store=='rates'){
             console.log("IDB: Exchange rate added successfully!");
@@ -43,25 +42,26 @@ function addDB(store, entry){
         } else if(store=='currencies'){
             console.log("IDB: Currencies added successfully!")
         }
-    });
+    }).catch(err => {
+        console.log('IDB ADD Error: ', err, 'for store: ', store)
+    })
 }
 
 /**
  * @function getDB
  * @description Retrieves rate/graph values from IDB
- * @param string IDB store to be transacted upon
- * @param string key
+ * @param required store: IDB store to be transacted upon(string)
+ * @param optional key: optional in the case of store.getAll() (string)
  * @returns Rate or Data from the store
  */
 function getDB(store, key){
     console.log("IDB: Getting val: ", key)
-    const dbPromise = openDB();
-	return dbPromise.then(db => {
-		const tx = db.transaction(store, 'readonly');
-        let Store = tx.objectStore(store);
-        if (store=='currencies'){
-            return Store.getAll()
-        }
+			return dbPromise.then(db => {
+			let tx = db.transaction(store, 'readonly');
+			let Store = tx.objectStore(store);
+			if (store=='currencies'){
+					return Store.getAll()
+			}
 		return Store.get(key);
 	}).then(val => {
         if (store=='rates'){
@@ -84,7 +84,6 @@ function getDB(store, key){
  * @returns Rate or Data from the store
  */
 function deleteDB(store, key){
-    const dbPromise = openDB();
     return dbPromise.then(db => {
 		let tx = db.transaction(store, 'readwrite');
 		let rateStore = tx.objectStore(store);
