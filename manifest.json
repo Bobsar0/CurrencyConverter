@@ -1,6 +1,6 @@
 {
     "name": "Currency Converter",
-    "short_name": "Swift Converter",
+    "short_name": "CurrencyPWA",
     "description": "A Progressive Web App that finds the conversion rate between two countries. Accomplished as part of the AlcwithGoogle3.0 challenge project.",
     "start_url": ".",
     "lang": "en-US",
