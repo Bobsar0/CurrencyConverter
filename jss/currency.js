@@ -195,5 +195,5 @@ function clearToInput(){
 	document.getElementById("convertResult").innerHTML = "";
 	document.getElementById("graph").innerHTML = "";
 	document.getElementById("graphTitle").innerHTML = "";
-	document.getElementById("graphTitle").innerHTML = `<h1 id='initTitle' style='font-size: 20px; text-align:center; color:#32a0c2; text-shadow: 2px 2px 4px #000000; margin-top: 0px'>Chart of CONVERSION RATE over TIME appears here...</h1>`;
+	document.getElementById("initTitle").innerHTML = `<h1 id='initTitle' style='font-size: 20px; text-align:center; color:#32a0c2; text-shadow: 2px 2px 4px #000000; margin-top: 0px'>Chart of CONVERSION RATE over TIME appears here...</h1>`;
 }
