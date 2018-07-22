@@ -65,7 +65,6 @@ header a:hover{  /*Changes appearance of menu links when the mouse is moved over
     background-size: cover; /*This and no-repeat center above ensures image adapts to various screen sizes  */
     text-align: center;
     color: #fcfcfc;
-    /* padding-bottom: 120px */
     border-bottom: #32a0c2 3px solid;
 }
 
@@ -80,65 +79,27 @@ header a:hover{  /*Changes appearance of menu links when the mouse is moved over
     text-shadow: 2px 2px 4px #000000
 }
 
-/* Countries */
-#countries{
-    padding: 10px;
-    color: #ffffff;
-    background: #32a0c2;
-}
-#countries h1{
-    text-align: center;
-    text-shadow: 2px 2px 4px #000000;
-}
-
-#accordion {
-    background-color: #eee;
-    color: #444;
-    cursor: pointer;
-    padding: 18px;
-    width: 100%;
-    border: none;
-    text-align: left;
-    outline: none;
-    font-size: 15px;
-    transition: 0.4s;
-}
-
-.active, #accordion:hover {
-    background-color: #32a0c2; 
-}
-
-.panel {
-    padding: 0 18px;
-    display: none;
-    background-color: white;
-    overflow: hidden;
-}
-
 #newsletter{
     padding: 15px;
     color: #ffffff;
     background: #353637;
-    /* border-bottom: #32a0c2 3px solid; */
 }
 
 .chart{
     width: 100%; 
     margin: 0;
-    min-height: 250px;
-    /* margin-top: -1px */
+    min-height: 200px;
 }
 
 /* Footer */
 footer{
-    padding: 20px;
+    padding: 5px;
     margin-top: 20px;
     color: #ffffff;
     background-color: #353637;
     text-align: center;
     text-shadow:#32a0c2;
-    /* font-weight: bold; */
-    font-size: 16px
+    font-size: 15px
 }
 
 /*Boxes*/
@@ -150,58 +111,6 @@ footer{
     color: #32a0c2;
 }
 
-/********ABOUT*****************/
-/* Sidebar */
-aside#sidebar{
-    float: right;
-    width: 30%;
-    padding: 5px;
-}
-aside#sidebar .contact input, aside#sidebar .contact textarea{
-    width: 90%;
-    padding: 5px;
-}
-aside#sidebar .imgs{
-    float: center;
-    width: 180px;
-    height: 180px
-}
-article#main-col{
-    float: left;
-    width: 65%;
-}
-
-/********* Services ************/
-ul#services li{
-    list-style: none;
-    padding: 20px;
-    border: #cccccc groove 5px;
-    margin-bottom: 5px;
-    background: #32a0c2;
-}
-ul#services h3{
-    border-bottom: #353637 solid 1px;
-}
-
-/***** Gallery*******/
-#gallerybg{
-    background-image: url('../img/header3.jpg');
-    min-height: 400px;
-    background-position: center;
-    background-size: cover;
-    text-align: center;
-    color: #353637;
-}
-#gallerybg h2{
-    font-size: 25px;
-}
-#gallerybg h1{
-    margin-top: 20px;
-    font-size: 55px;
-    margin-bottom: 20px;
-}
-
-
     /********RESPONSIVENESS********/
 /* Adding media queries to ensure the website is responsive so as to adapt to changing screen sizes */
 @media(max-width: 800px) { /* Valid for screen sizes with max width of 800 pixel*/
@@ -209,10 +118,7 @@ ul#services h3{
     header nav,
     header nav li,
     #newsletter h1,
-    #newsletter form,
-    #boxes .box,
-    article#main-col,
-    aside#sidebarm{
+    #boxes .box{
         float: none;
         text-align: center;
         width: 100%;
@@ -223,15 +129,4 @@ ul#services h3{
     #showcase h1{
         margin-top: 40px;
     }
-    #countries button{
-        display: block;
-        width: 100%;
-    }
-    #countries form input[type="email"],
-    .contact input,
-    .contact textarea,
-    .contact label{
-        width: 100%;
-        margin-bottom: 5px;
-      }
 }

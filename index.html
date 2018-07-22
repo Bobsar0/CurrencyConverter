@@ -12,13 +12,12 @@
     
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" href="./css/form.css">
-    <link rel="stylesheet" href="./css/fontawesome/fontawesome-all.css">
+    <link rel="stylesheet" href="./css/fontawesome/fontawesome-all.min.css">
     <link rel="manifest" href="./manifest.json">
-    <script src="./jss/jquery-3.3.1.min.js" async></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" async></script>
 </head>
-<body onload="getCurrencies()">
-        <!-- contains top level bar of site with branding and navigation menu. -->
+
+<body>
+        <!-- contains top-level bar of site with branding and navigation menu. -->
     <header> 
         <div class="container">
             <div id="branding">
@@ -38,8 +37,8 @@
             <p><span style="color: goldenrod">SWIFTLY</span> calculates exchange rates between any two Currencies!</p>
                 
             <button class="from">From</button>
-            <input type="number" id="fromAmount" placeholder=1 value=1 oninput="convert()">
-            <select id="selectFrom" onclick="getCurrencies()" onchange="clearToInput()"> <!--JS function call inserts Currencies to convert FROM as options-->
+            <label><input type="number" id="fromAmount" placeholder=1 value=1 oninput="convert()"></label>
+            <select id="selectFrom" onchange="clearToInput()"> <!--JS function call inserts Currencies to convert FROM as options-->
             </select>
             <div class="swap"> 
                 <button class="swapBtn" onclick="return swap()" title="Click to swap currencies">
@@ -47,8 +46,8 @@
                 </button>
             </div>
             <button class="to">To </button>
-            <input type="number" id="toAmount" placeholder="Click convert..." readonly>
-            <select id="selectTo" onclick="getCurrencies()" onchange="clearToInput()"><!--JS function call inserts Currencies to convert TO here-->
+            <label><input type="number" id="toAmount" placeholder="Click convert button..." readonly></label>
+            <select id="selectTo"  onchange="clearToInput()"><!--JS function call inserts Currencies to convert TO here-->
             </select>
             <div>
                 <button type="submit" class="convertbutton" id="convertButton" onclick="convert()">Convert</button></td>
@@ -57,8 +56,8 @@
         </div>
     </section>
     <section id="newsletter">
-            <h1 id='initTitle' style='font-size: 45px; text-align:center; color:#32a0c2; text-shadow: 2px 2px 4px #000000; margin-top: 0px'>Chart of CONVERSION RATE over TIME appears here...</h1>
-            <h3 id='graphTitle' style='text-align: center; text-shadow: 2px 2px 4px #000000; margin-top: -20px'></h3>
+            <h1 id='initTitle' style='font-size: 20px; text-align:center; color:#32a0c2; text-shadow: 2px 2px 4px #000000; margin-top: 0px'>Chart of CONVERSION RATE over TIME appears here...</h1>
+            <p id='graphTitle' style='text-align: center; text-shadow: 2px 2px 4px #000000; margin-top: -20px'></p>
             <div class="chart" id="graph" style='margin: 0'></div>
     </section> 
     <section id="boxes"><!--Contains boxes to highlight features-->
@@ -71,7 +70,7 @@
             </div>
             <div class="box">
                 <i class="fas fa-globe fa-4x"></i>
-                <h3>All currencies supported (incl. BITCOIN)</h3>
+                <h3>155 Fiat currencies supported (plus BITCOIN)</h3>
                 <p></p>
             </div>
             <div class="box">
@@ -86,20 +85,31 @@
             </div>
         </div>
     </section>
-    <!--CONVERT-->
-    <footer>
-        <p>SwiftConverter, Copyright &copy; 2018</p>
-        <p>Sponsored by: <span style="color: royalblue">G </span><span style="color: red">o </span><span style="color: orange">o </span><span style="color: royalblue">g </span><span style="color: green">l </span><span style="color: red">e </span> | 
-            <span style="color:royalblue">U d a c i t y</span>  |
-            Andela Learning Community </p>
-        <p>Powered by:  <i>The Free Currency Converter API</i></p></p>
-    </footer>
-    <script src="./jss/idb.js"></script>
-    <script src="./jss/maindb.js" asnyc></script>
-    <script src="./sw.js"></script>
-    <script src="./jss/currency.js"></script>
-    <script type="text/javascript" src="./jss/jscharts.js"></script>
-    <script src="./jss/graph.js"></script>
-
-</body>
+    <!--FOOTER-->
+        <footer>
+            <p>SwiftConverter, Copyright &copy; 2018</p>
+            <p>Sponsored by: <span style="color: royalblue">G </span><span style="color: red">o </span><span style="color: orange">o </span><span style="color: royalblue">g </span><span style="color: green">l </span><span style="color: red">e </span> | 
+                <span style="color:royalblue">U d a c i t y</span>  |
+                Andela (ALC 3.0)</p>
+            <p>Follow me: <i class="fab fa-github" style="color:#32a0c2"></i><a href="https://github.com/Bobsar0" style="color: grey">Github</a><span style="color:#353637">-</span>  
+                 <i class="fab fa-linkedin" style="color:#32a0c2"></i><a href="https://linkedin.com/in/SteveOnyeneke" style="color: grey">LinkedIn</a><span style="color:#353637">-</span>  
+                <i class="fab fa-twitter" style="color:#32a0c2"></i><a href="https://twitter.com/SteveOnyeneke" style="color: grey">Twitter</a>
+            </p>
+        </footer>
+        <!-- Load Service Worker script -->
+        <script src="./sw.js"></script>
+        <!-- Load scripts for IndexedDB interaction functions -->
+        <script src="./jss/idb.js"></script>
+        <script src="./jss/maindb.js"></script>
+        <!-- Load controller script for Getting Currencies & Currency Conversion -->
+        <script src="./jss/currency.js"></script>
+        <!-- Load script for plotting Graph -->
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js" async></script>
+        <script src="./jss/chart/jquery-3.3.1.js" async></script>
+        <script src="./jss/chart/graph.js" async></script>
+        <script>
+            // Initialize Controller
+            initController();
+        </script>
+    </body>
 </html>
