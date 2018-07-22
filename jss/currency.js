@@ -43,7 +43,6 @@ function initController() {
 						populateSelect(sorted);
 						sorted.map(currency => {
 							addDB('currencies', currency)
-							console.log('Added currency to db: ', currency)
 						});
 					}); 
 				});           
@@ -51,10 +50,9 @@ function initController() {
 				reg.installing.addEventListener('statechange', () => {
 					if (sw.state === 'installed') {//retrieve currencies from database
 						console.log("SW Installed!...Reloading window to activate")
-						
 						setTimeout(() => {
 							window.location.reload();
-						}, 1500);
+						}, 1200);
 						return getDB('currencies').then(allCurrencies => {
 							populateSelect(allCurrencies)
 						});
@@ -77,7 +75,7 @@ function initController() {
  * @function sortCurrencies
  * @description Sorts Currency list 
  * @param required currencies: Array of Currency object
- * @returns Sorted array of Currency object. [[ID1, {currency Object1}], [ID2, {currency Object2}],... ]
+ * @returns Sorted array of Currency object.
  */
 function sortCurrencies(currencies) {
 	//sort by currencyName using compare function
@@ -140,25 +138,24 @@ function convert(){
 			};
 			//Adding exchange rate object to the object store
 			addDB('rates', exchRateObj);
-			//Delete record from database after 1hour
+			//Delete record from database after 3hours
 			setTimeout(() => {
 				deleteDB('rates', exchRateObj.id);
-			}, 60*60000);
+			}, 3*60*60000);
 		}).catch(jsonErr => {console.log("Error in parsing JSON data: ", jsonErr);})
 	}).catch(() => { //if fetch fails to retrieve from network:
 		console.log("Error in fetching from network, Checking for rate in IDB... ");
 		getDB('rates', query).then(val => {
 			const output = document.getElementById("toAmount");
 			output.value = val*amount;
-			document.getElementById('convertResult').innerHTML = `<i><span style="color: red">OFFLINE?</span> Rates will still be displayed!...</i><br> ${new Date()}:<br><span style="color: green">${amount}</span> ${selectFrom} is equal to <span style="color:green"><b>${(val*amount).toFixed(2)}</b></span> ${selectTo}`;//displays result on html element with id 'convertResult'
+			document.getElementById('convertResult').innerHTML = `<i><span style="color: red">OFFLINE?</span> Rates will still be displayed!...</i><br> ${new Date()}:<br><span style="color: green">${amount}</span> ${selectFrom} is equal to <span style="color:green"><b>${((val*amount).toFixed(2).toString()).replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;//displays result on html element with id 'convertResult'
 			return;
 		}).catch(() => {
 			const output = document.getElementById("toAmount");
 			output.value = null;
-			document.getElementById('convertResult').innerHTML = "Are you OFFLINE? <br> Sorry result not in your local IDB yet. Please go back ONLINE asap so it can be updated for your next search";
+			document.getElementById('convertResult').innerHTML = "Are you OFFLINE? <br> Sorry result not in your local Database yet. Please get ONLINE asap so that rates can be updated for your next OFFLINE search";
 		})
 	});
-	console.log("Plotting Graph...");
 	plotGraph(selectFrom, selectTo);
 	$(window).resize(() => { //controls responsiveness of graph during screen resize - jQuery
 		plotGraph(selectFrom, selectTo);
@@ -181,18 +178,15 @@ function swap(){
 
 	listFrom.options[listFrom.selectedIndex].text = listTo.options[listTo.selectedIndex].text;
 	listFrom.options[listFrom.selectedIndex].value = listTo.options[listTo.selectedIndex].value;
-
 	listTo.options[listTo.selectedIndex].text= tempText;
 	listTo.options[listTo.selectedIndex].value = tempVal;
-	console.log(tempText, tempVal);
 
 	clearToInput();// clear previous output value and result string & graph underneath the convert button
 	convert();
-	console.log("SWAPPED CURRENCIES SUCCESSFULLY!");
 }
 /**
  * @function clearToInput
- * @description //Clears previous output amount value and resultant string displayed
+ * @description //Clears previous output amount value, resultant string & graph displayed
  * @param null
  * @returns null
  */
@@ -200,4 +194,6 @@ function clearToInput(){
 	document.getElementById("toAmount").value = null;
 	document.getElementById("convertResult").innerHTML = "";
 	document.getElementById("graph").innerHTML = "";
+	document.getElementById("graphTitle").innerHTML = "";
+	document.getElementById("graphTitle").innerHTML = `<h1 id='initTitle' style='font-size: 20px; text-align:center; color:#32a0c2; text-shadow: 2px 2px 4px #000000; margin-top: 0px'>Chart of CONVERSION RATE over TIME appears here...</h1>`;
 }

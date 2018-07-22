@@ -32,19 +32,9 @@ function addDB(store, entry){
     dbPromise.then(db => {
         let tx = db.transaction(store, 'readwrite');
         let entryStore = tx.objectStore(store);
-				entryStore.add(entry);
-				return tx.complete
-    }).then(() => {
-        if (store=='rates'){
-            console.log("IDB: Exchange rate added successfully!");
-        } else if(store=='graph'){
-            console.log("IDB: Graph values added successfully!");
-        } else if(store=='currencies'){
-            console.log("IDB: Currencies added successfully!")
-        }
-    }).catch(err => {
-        console.log('IDB ADD Error: ', err, 'for store: ', store)
-    })
+        entryStore.add(entry);
+        return tx.complete;
+    }).catch(()=>console.log(''));
 }
 
 /**
@@ -55,23 +45,19 @@ function addDB(store, entry){
  * @returns Rate or Data from the store
  */
 function getDB(store, key){
-    console.log("IDB: Getting val: ", key)
-			return dbPromise.then(db => {
-			let tx = db.transaction(store, 'readonly');
-			let Store = tx.objectStore(store);
-			if (store=='currencies'){
-					return Store.getAll()
-			}
+		return dbPromise.then(db => {
+		let tx = db.transaction(store, 'readonly');
+		let Store = tx.objectStore(store);
+		if (store=='currencies'){
+				return Store.getAll()
+		}
 		return Store.get(key);
 	}).then(val => {
         if (store=='rates'){
-            console.log("IDB: Exchange rate fetched from IDB successfully!");
             return val.rate 
         } else if(store=='graph'){
-            console.log("IDB: Graph values fetched from IDB successfully!");
             return val.data
         } else  if (store=='currencies'){
-            console.log("IDB: All currencies fetched from IDB successfully!");
             return val
         }
 	});
@@ -84,16 +70,14 @@ function getDB(store, key){
  * @returns Rate or Data from the store
  */
 function deleteDB(store, key){
-    return dbPromise.then(db => {
-		let tx = db.transaction(store, 'readwrite');
-		let rateStore = tx.objectStore(store);
-        rateStore.delete(key);
-        return tx.complete;
+	return dbPromise.then(db => {
+	let tx = db.transaction(store, 'readwrite');
+	let rateStore = tx.objectStore(store);
+		rateStore.delete(key);
+		return tx.complete;
 	}).then(() => {
-        if (store=='rates'){
-            alert(`${key} rate value deleted from your database. Value will be updated upon next fetch from network`);
-        } else if(store=='graph'){
-            console.log("IDB: Graph values deleted... Will be updated in IDB upon next fetch from network");
-        }
-    })
+			if (store=='rates'){
+					alert(`${key} rate value deleted from your database. Value will be updated upon next fetch from network`);
+			}
+	})
 }

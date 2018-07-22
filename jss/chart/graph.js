@@ -14,7 +14,8 @@ function plotGraph(from, to){
         alert(`Cannot generate graph of ${from} to ${to} due to insignificant rate value`);
         return;
     }
-    const graphTitle=`PLOT of <span style='color: #32a0c2'>${from}</span> to <span style='color: #32a0c2'>${to}</span><i>(7 days.)</i>`;
+    const graphTitle= `<p style='text-align: center; text-shadow: 2px 2px 4px #000000; margin-top: -20px'>
+    PLOT of <span style='color: #32a0c2'>${from}</span> to <span style='color: #32a0c2'>${to}</span><i>(7 days.)</i></p>`;
 
     //Checking for Graph parameters in IDB to achieve offline first:
     console.log("Checking for Graph params in IDB first... ");
@@ -56,15 +57,13 @@ function plotGraph(from, to){
             return resp.json().then(data => { // Reads the response stream (resp) and  returns a promise that resolves with the result of parsing the JSON body text.
                 const entVal = Object.entries(data)[0][1];
                 let valArray = Object.entries(entVal);
-                console.log("valArr: ", valArray)//array of 7 arrays
-
                 let nArr = [['Date', 'Rate']]; //array data to be used in plot
                 for (let [k,v] of valArray){
                         nArr.push([k,v])//Inserts date and val rather than index and val to be used in plot
                 }
+
                 // **********PLOT GRAPH*************
                 plot(nArr, graphTitle);
-
                 //*** THEN ADD TO DATABASE FOR SUBSEQUENT OFFLINE FETCH *****/
                 let graphObj = {
                     id: query,
@@ -77,9 +76,12 @@ function plotGraph(from, to){
                 setTimeout(() => {
                     deleteDB('graph', exchRateObj.id);
                 }, 60*60000);
-            }).catch(jsonErr => {console.log("Error in parsing JSON data: ", jsonErr);})
+            }).catch(jsonErr => {
+                document.getElementById('graphTitle').innerHTML = `<h1 style='font-size: 20px; text-align:center; color:#32a0c2; text-shadow: 2px 2px 4px #000000; margin-top: 0px'>Chart of CONVERSION RATE over TIME appears here...</h1>`;
+                console.log("Graph: Error in parsing JSON data: ", jsonErr);
+            })
         }).catch(() => { //if fetch fails to retrieve from network:
-            console.log("Error in fetching Graph from network, Waiting for next connection to network to update IDB... ");
+            document.getElementById('graphTitle').innerHTML = `<h1 style='font-size: 20px; text-align:center; color:#32a0c2; text-shadow: 2px 2px 4px #000000; margin-top: 0px'>Chart of CONVERSION RATE over TIME appears here...</h1>`;
         });
     })
 }

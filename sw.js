@@ -5,10 +5,11 @@
 // Creating the cache and adding items to it
 const staticCacheName = 'converter-v2'; //TO-DO: VERSIONING
 
-// On the ServiceWorker install event - We cache the HTML, CSS, JS, and any files that make up the application shell. Also cache the currency store from the API URL to quickly populate list of currencies upon document load:
+// On the ServiceWorker install event - We cache the HTML, CSS, JS, and any files that make up the application shell.
 // This event listener triggers when the ServiceWorker is first installed
 self.addEventListener('install', event => {
     let urlsToCache = [
+        '.',
         './',
         './index.html',
         './sw.js',
@@ -51,8 +52,7 @@ self.addEventListener('activate', event => {
     )
 });
 
- //Return entry for matching response from cache
-// If there isn't, fetch from the network.
+ //Return entry for matching response from cache. If there isn't, fetch from the network.
 self.addEventListener('fetch', event => {
     event.respondWith(  
         caches.open(staticCacheName).then(cache => {
@@ -62,7 +62,6 @@ self.addEventListener('fetch', event => {
                     return response;
                 }
                 //Attempt to fetch from network if the item is not matched in cache
-                // return fetch(event.request)
                 return fetch(event.request).then(resp => { //Otherwise, fetch from network
                     if (resp.status == 404){
                         console.log("SW: 404 error! Displaying custom image...")
