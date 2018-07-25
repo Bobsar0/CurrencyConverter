@@ -173,13 +173,13 @@ function swap(){
     let listFrom = document.querySelector('select#selectFrom'); // returns the select Element within the HTML document with id="currencies"
 	let listTo= document.querySelector('select#selectTo'); // returns the select Element within the HTML document with id="currencies"
 	// SWAP
-	const tempText = listFrom.options[listFrom.selectedIndex].text;
-	const tempVal = listFrom.options[listFrom.selectedIndex].value;
+	const tempText = listFrom.text;
+	const tempVal = listFrom.value;
 
-	listFrom.options[listFrom.selectedIndex].text = listTo.options[listTo.selectedIndex].text;
-	listFrom.options[listFrom.selectedIndex].value = listTo.options[listTo.selectedIndex].value;
-	listTo.options[listTo.selectedIndex].text= tempText;
-	listTo.options[listTo.selectedIndex].value = tempVal;
+	listFrom.text = listTo.text;
+	listFrom.value = listTo.value;
+	listTo.text= tempText;
+	listTo.value = tempVal;
 
 	clearToInput();// clear previous output value and result string & graph underneath the convert button
 	convert();
